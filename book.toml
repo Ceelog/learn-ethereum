@@ -1,0 +1,6 @@
+[book]
+authors = ["chenwei"]
+language = "zh-CN"
+multilingual = false
+src = "src"
+title = "learn ethereum"
