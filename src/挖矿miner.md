@@ -1,9 +1,7 @@
 
-# 挖矿管理
+# 挖矿
 
-概览 `geth` 挖矿主要流程：
-
-![主要流程图](./imgs/miner.png)
+![主要流程图](./imgs/miner_loop.png)
 
 ## 启动挖矿
 
@@ -26,7 +24,7 @@ MINER OPTIONS:
 
 ```
 
-如果没有显式启用挖矿，即参数 `--mine`，那么节点不会开始挖矿
+如果没有显式启用挖矿，即不设置参数 `--mine`，那么节点不会开始挖矿
 
 可以在节点启动后，手动在控制台启动挖矿：
 
@@ -34,55 +32,36 @@ MINER OPTIONS:
 > miner.start(1)
 ```
 
-`miner.Start()` 方法会在 `miner.startCh` 管道发送开始信号
+## 信号调度
 
-miner 接收到开始信号后，调用 `worker.start()`，在 `worker.startCh` 管道发送开始信号
+Worker 启动四个循环，通过监听各个通道的信号变化来调度挖矿过程
 
-worker 接收到开始信号后，会提交一个 `newWorkReq` 请求到 `worker.newWorkCh` 管道
+- newWorkLoop：
+    - startCh:监听 `miner.worker.start()`
+    - chainHeadCh：监听新出块事件`ChainHeadEvent`
+    - timer.C：监听定时触发事件
+    - 当以上任意信号发生时，调用 `commit()` 方法，提交 `newWorkReq{}` 请求
 
- `worker.newWorkCh` 管道 接收到信号后，通过 `worker.commitNewWork()` 执行全部交易，然后提交一个出块任务信号到 `worker.taskCh` 管道
+- mainLoop:
+    - newWorkCh：监听 `newWorkReq{}` 信号：
+        - 调用 `worker.commitNewWork()`：
+            - 计算难度
+            - 提交叔块
+            - 执行交易
+            - 创建计算任务
 
+    - chainSideCh：监听叔块事件
+    - txsCh：监听新交易事件
 
-```
-worker.commitNewWork() {
-    worker.commitTransactions() {
+- taskLoop：
+    - taskCh：监听任务信号：
+        - 中断进行中的计算
+        - 重新开始计算
+        - 返回计算结果
 
-        // 执行每笔交易 
-        core.ApplyTransaction()
-    }
-
-    worker.commit() {
-        engine.FinalizeAndAssemble() {
-
-            // 发放出块奖励
-            ethash.accumulateRewards()
-        }
-    }
-}
-```
-
-
-`worker.taskCh` 管道接收到任务信号后，调用共识引擎 `engine.Seal()` 执行具体的计算任务，在 `Ethash` 共识算法中就是计算出一个满足难度要求的哈希值：
-
-```
-engine.Seal() {
-    ethash.mine() {
-        for {
-            result := hashimotoFull()
-            if result <= target {
-                
-                // 挖矿成功
-                break 
-            }
-            nonce++
-        }
-    }
-}
-```
-
-如果挖矿成功，会将结果发送到 `worker.resultCh` 管道，同时触发 `ChainHeadEvent` 事件
-
-`worker.resultCh` 接收到结果信号后，会调用 `chain.WriteBlockWithState()` 存储新区块，同时全网广播出块事件 `NewMinedBlockEvent`
-
-`worker.chainHeadCh` 会订阅`ChainHeadEvent` 事件，当事件发生时又发送信号到 `worker.newWorkCh`，让 worker 开启下一轮挖矿
-
+- resultLoop：
+    - resultCh：监听结果信号：
+        - 广播出块事件 `NewMinedBlockEvent`
+        - 写入区块链：
+            - 触发 `ChainHeadEvent` 事件：
+                - 由于 `newWorkLoop` 在监听`ChainHeadEvent`，所以会开始下一轮挖矿
