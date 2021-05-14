@@ -1,0 +1,3241 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>learn ethereum</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="开发环境搭建.html"><strong aria-hidden="true">1.</strong> 开发环境搭建</a></li><li class="chapter-item expanded "><a href="Geth命令及参数.html"><strong aria-hidden="true">2.</strong> Geth命令及参数</a></li><li class="chapter-item expanded "><a href="rpc接口与实现列表.html"><strong aria-hidden="true">3.</strong> rpc接口与实现列表.md</a></li><li class="chapter-item expanded "><a href="交易池调度.html"><strong aria-hidden="true">4.</strong> 交易</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="交易池调度.html"><strong aria-hidden="true">4.1.</strong> 交易池调度</a></li><li class="chapter-item expanded "><a href="交易执行.html"><strong aria-hidden="true">4.2.</strong> 交易执行</a></li></ol></li><li class="chapter-item expanded "><a href="挖矿miner.html"><strong aria-hidden="true">5.</strong> 挖矿miner</a></li><li class="chapter-item expanded "><a href="操作码.html"><strong aria-hidden="true">6.</strong> EVM以太坊虚拟机</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="操作码.html"><strong aria-hidden="true">6.1.</strong> 操作码</a></li><li class="chapter-item expanded "><a href="字节码执行.html"><strong aria-hidden="true">6.2.</strong> 字节码执行</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">learn ethereum</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        
+
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="编译安装-go-ethereum"><a class="header" href="#编译安装-go-ethereum">编译安装 go-ethereum</a></h1>
+<h2 id="go-语言开发环境"><a class="header" href="#go-语言开发环境">Go 语言开发环境</a></h2>
+<p>首先确保本机已安装 Go 开发环境：</p>
+<pre><code class="language-shell">$ go version
+
+go version go1.15 windows/amd64
+</code></pre>
+<h2 id="下载-go-ethereum-源码"><a class="header" href="#下载-go-ethereum-源码">下载 go-ethereum 源码</a></h2>
+<pre><code>git clone git@github.com:ethereum/go-ethereum.git
+</code></pre>
+<p>切换到稳定版分支：</p>
+<pre><code>git checkout v1.10.2
+</code></pre>
+<h2 id="编译安装"><a class="header" href="#编译安装">编译安装</a></h2>
+<p>进入代码目录 <code>cd go-ethereum</code> 执行编译：</p>
+<pre><code>$ make all
+
+env GO111MODULE=on go run build/ci.go install
+...
+...
+</code></pre>
+<p>如果是 Windows 环境，可以在 http://mingw-w64.org/ 下载安装 <code>mingw32-make</code> ，然后执行编译：</p>
+<pre><code>$ mingw32-make all
+
+env GO111MODULE=on go run build/ci.go install
+...
+...
+</code></pre>
+<p>或者直接执行 Go 安装脚本：</p>
+<pre><code>go run build/ci.go install
+</code></pre>
+<blockquote>
+<p>Tips: 本文就是在 Windows 10 环境下完成演示</p>
+</blockquote>
+<p>编译完成后，可以在源码的 <code>build/bin</code> 目录下查看可执行文件：</p>
+<pre><code>$ cd build/bin/ &amp;&amp; ls
+
+abidump.exe  
+abigen.exe  
+bootnode.exe  
+checkpoint-admin.exe  
+clef.exe  
+devp2p.exe  
+ethkey.exe  
+evm.exe  
+faucet.exe  
+geth.exe  
+p2psim.exe  
+puppeth.exe  
+rlpdump.exe
+...
+</code></pre>
+<p>查看 <code>geth</code> 版本信息：</p>
+<pre><code>$ ./geth.exe version
+
+Geth
+Version: 1.10.2-stable
+Git Commit: 97d11b0187b4695ccf44e3b71b54155fe405a36f
+Architecture: amd64
+Go Version: go1.15
+Operating System: windows
+...
+</code></pre>
+<p>恭喜！我们已经完成了 <code>go-ethereum</code> 的安装 </p>
+<h1 id="使用-clef-管理-ethereum-账户"><a class="header" href="#使用-clef-管理-ethereum-账户">使用 Clef 管理 Ethereum 账户</a></h1>
+<p>在上 part 中，我们已经完成了 <code>clef</code> 程序的编译安装，<code>clef</code> 是 <code>go-ethereum</code> 专门用来管理账户的辅助程序，可以创建账户和完成签名：</p>
+<pre><code>$ ./clef.exe h
+
+NAME:
+   Clef - Manage Ethereum account operations
+
+   Copyright 2013-2021 The go-ethereum Authors
+
+USAGE:
+   clef.exe [options] command [command options] [arguments...]
+
+COMMANDS:
+   init                               Initialize the signer, generate secret storage
+   attest                             Attest that a js-file is to be used
+   setpw                              Store a credential for a keystore file
+   delpw                              Remove a credential for a keystore file
+   newaccount                         Create a new account
+   gendoc                             Generate documentation about json-rpc format
+   help, h                            Shows a list of commands or help for one command
+
+FLAGS OPTIONS:
+  --loglevel value                    ...
+  ...
+
+</code></pre>
+<h2 id="初始化-clef"><a class="header" href="#初始化-clef">初始化 Clef</a></h2>
+<p>初始化脚本会创建主密钥，需要提供 10 位及以上长度的密码完成加密：</p>
+<pre><code>$ ./clef.exe init
+
+...
+Enter 'ok' to proceed:
+&gt; ok
+...
+
+</code></pre>
+<h2 id="创建账户"><a class="header" href="#创建账户">创建账户</a></h2>
+<p>创建账户过程中，同样需要提供 10 位及以上长度的密码完成加密：</p>
+<pre><code>$ ./clef.exe newaccount
+
+...
+Enter 'ok' to proceed:
+&gt; ok
+...
+
+## New account password
+
+Please enter a password for the new account to be created (attempt 0 of 3)
+...
+Generated account 0x46e7328724A7...
+</code></pre>
+<p>创建完成后，可以在默认的 keystore 目录下看到账户文件，以 Windows 系统为例：</p>
+<pre><code>$ ls -la ~/AppData/Local/Ethereum/keystore
+
+UTC--2021-05-07T07-02-47.142238200Z--46e7328724a7...
+</code></pre>
+<p>文件内容示例：</p>
+<pre><code>{
+  &quot;address&quot;: &quot;46e7328724a7...&quot;,
+  &quot;crypto&quot;: {
+    ...
+  },
+  &quot;id&quot;: &quot;...&quot;,
+  &quot;version&quot;: 3
+}
+</code></pre>
+<blockquote>
+<p>Tips: 可以用同样的方法创建多个账户，下文配置创世区块的时候可以给这些账户预分配余额</p>
+</blockquote>
+<h1 id="ethereum-节点"><a class="header" href="#ethereum-节点">Ethereum 节点</a></h1>
+<p>为了方便演示，我们将启动只有一个节点的本地私有 Ethereum 网络</p>
+<h2 id="创世区块"><a class="header" href="#创世区块">创世区块</a></h2>
+<p>创世区块配置 <code>genesis.json</code>，其中 <code>alloc</code> 配置项可以设置预分配账户余额，建议使用上 part <code>clef</code> 创建的账户，节点启动后这些账户上就会有 10080 个 ETH 余额，方便开发调试:</p>
+<pre><code>{
+  &quot;config&quot;: {
+    &quot;chainId&quot;: 1337, // 一般约定本地私有网络 chianid = 1337
+    &quot;homesteadBlock&quot;: 0, // homesteadBlock 区块高度，私有网络只需 != nil 即可，例如：0
+    &quot;eip150Block&quot;: 0, // 同上
+    &quot;eip155Block&quot;: 0, // 同上
+    &quot;eip158Block&quot;: 0, // 同上
+    &quot;byzantiumBlock&quot;: 0, // 同上
+    &quot;constantinopleBlock&quot;: 0, // 同上
+    &quot;petersburgBlock&quot;: 0, // 同上
+    &quot;istanbulBlock&quot;:0, // 同上
+    &quot;muirGlacierBlock&quot;:0, // 同上
+    &quot;berlinBlock&quot;:0 // 同上
+    // 注意：如果阅读此文时有更多的分叉区块，都需要配置上，不同区块高度后的验证签名算法可能不一样
+    // 如果交易发送方使用了 berlinBlock 之后新的签名算法，节点无法验证的话会报错：invalid sender
+  },
+  &quot;alloc&quot;: {
+	  &quot;248672bac919...&quot;:{&quot;balance&quot;:&quot;10080000000000000000000&quot;}, // 注意单位 1 eth = 10^18 wei
+	  &quot;46e7328724a7...&quot;:{&quot;balance&quot;:&quot;10080000000000000000000&quot;}
+  },
+  &quot;nonce&quot;: &quot;0x0000000000000042&quot;,
+  &quot;difficulty&quot;: &quot;0x020000&quot;,
+  &quot;mixhash&quot;: &quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;,
+  &quot;coinbase&quot;: &quot;0x0000000000000000000000000000000000000000&quot;,
+  &quot;timestamp&quot;: &quot;0x00&quot;,
+  &quot;parentHash&quot;: &quot;0x0000000000000000000000000000000000000000000000000000000000000000&quot;,
+  &quot;extraData&quot;: &quot;0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa&quot;,
+  &quot;gasLimit&quot;: &quot;0x4c4b40&quot;
+}
+</code></pre>
+<p>初始化创世区块：</p>
+<pre><code>$ ./geth.exe init ~/AppData/Local/Ethereum/genesis.json
+
+INFO [05-07|15:39:59.549] Maximum peer count                       ETH=50 LES=0 total=50
+INFO [05-07|15:39:59.574] Set global gas cap                       cap=25000000
+...
+INFO [05-07|15:39:59.623] Successfully wrote genesis state         database=lightchaindata hash=&quot;dcc595…7102aa&quot;
+</code></pre>
+<h2 id="启动节点"><a class="header" href="#启动节点">启动节点</a></h2>
+<p>新开一个终端窗口：</p>
+<pre><code>$ ./geth.exe --nodiscover
+
+INFO [05-07|15:45:11.014] Starting Geth on Ethereum mainnet...
+...
+INFO [05-07|15:45:11.401] Started P2P networking                   self=&quot;enode://eda1a8e2d4d...@127.0.0.1:30303?discpo
+rt=0&quot;
+...
+</code></pre>
+<p>选项说明：</p>
+<blockquote>
+<p>--nodiscover  // 关闭 p2p 网络节点发现，确保不加入任何其他网络</p>
+</blockquote>
+<h2 id="连接节点"><a class="header" href="#连接节点">连接节点</a></h2>
+<p>节点启动时会默认开启 ipc 进程间通信管道，也可以主动开启支持 http 或 WebSocket 协议的 rpc 远程调用服务</p>
+<p>通过 ipc 服务 或者 rpc 接口，节点可以执行外部用户提供的管理、查询、交易等指令</p>
+<p>这里我们先使用 ipc 连接已启动的节点</p>
+<p>新开一个终端，进入 Geth JavaScript 控制台：</p>
+<pre><code>$ ./geth.exe attach \\.\pipe\geth.ipc
+
+Welcome to the Geth JavaScript console!
+
+instance: Geth/v1.10.2-stable-97d11b01/windows-amd64/go1.15
+coinbase: 0x61d55d8015aa...
+...
+modules: admin:1.0 debug:1.0 eth:1.0 ethash:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
+
+To exit, press ctrl-d
+&gt;
+
+</code></pre>
+<h2 id="解锁账户"><a class="header" href="#解锁账户">解锁账户</a></h2>
+<p>每次发送交易之前，发送方需要使用密钥完成签名</p>
+<p>为了方便测试，可以使用密码提前解锁交易发送方账户，之后再发送交易的话 <code>geth</code> 会自动使用密钥对交易数据签名</p>
+<pre><code>&gt; personal.unlockAccount(&quot;46e7328724a7...&quot;,&quot;012...&quot;,36000)
+
+// 参数：账户地址，账户密码，解锁有效时长(单位 秒)
+
+// 解锁成功
+true
+</code></pre>
+<h1 id="转账交易"><a class="header" href="#转账交易">转账交易</a></h1>
+<p>接下来我们将执行交易相关的指令，看看 Ethereum 是如何处理交易的</p>
+<h2 id="查询余额"><a class="header" href="#查询余额">查询余额</a></h2>
+<p>输入查询余额指令：</p>
+<pre><code>&gt; eth.getBalance(&quot;46e7328724a...&quot;)
+
+// 查询结果 注意单位为 wei （1 eth = 10^18 wei）
+1.008e+22
+</code></pre>
+<p>使用创世区块预分配的账户作为查询参数，可以看到余额确实为预分配的数额</p>
+<p>也可以转换为 <code>ether</code> 单位：</p>
+<pre><code>&gt; web3.fromWei(eth.getBalance(&quot;46e7328724a...&quot;),&quot;ether&quot;)
+
+// 查询结果 单位为 eth
+10080
+</code></pre>
+<h2 id="转账"><a class="header" href="#转账">转账</a></h2>
+<p>输入转账指令：</p>
+<pre><code>// 转出 10 eth
+
+&gt; eth.sendTransaction({from:&quot;46e7328724a7...&quot;,to:&quot;248672bac9196446...&quot;, value: web3.toWei(10,&quot;ether&quot;)})
+
+// 返回结果：交易 hash
+
+&quot;0x25d0909d7fa61be3449c9c9f6c...&quot;
+</code></pre>
+<blockquote>
+<p>注意：</p>
+<p>虽然成功提交了交易，但是节点没有开启挖矿，所以不会打包交易产出新的区块</p>
+<p>交易还在交易池等待打包</p>
+</blockquote>
+<p>查看交易池状态：</p>
+<pre><code>&gt; txpool.status
+{
+  pending: 1,
+  queued: 0
+}
+</code></pre>
+<h2 id="启动挖矿"><a class="header" href="#启动挖矿">启动挖矿</a></h2>
+<pre><code>&gt; miner.start(1)
+
+// 参数表示启动 1 个线程，也可以 2/3/...
+</code></pre>
+<p>可以在 <code>geth</code> 终端看到出块日志：</p>
+<pre><code>INFO [05-07|17:45:18.367] Updated mining threads                   threads=1
+INFO [05-07|17:45:18.367] Transaction pool price threshold updated price=1000000000
+INFO [05-07|17:56:05.031] Etherbase automatically configured       address=0x61d55D8015Aa018Ea87f2D4F2A1Ee8Af1912a887
+INFO [05-07|17:56:05.032] Commit new mining work                   number=1 sealhash=&quot;a29c2e…a33157&quot; uncles=0 txs=0 gas=0 fees=0 elapsed=0s
+INFO [05-07|17:56:05.033] Commit new mining work                   number=1 sealhash=&quot;a068c9…e980b4&quot; uncles=0 txs=1 gas=21000 fees=2.1e-05 elapsed=1.009ms
+INFO [05-07|17:56:12.566] Successfully sealed new block            number=1 sealhash=&quot;a068c9…e980b4&quot; hash=&quot;cf056d…8cf707&quot; elapsed=7.533s
+INFO [05-07|17:56:12.566] 🔨 mined potential block                number=1 hash=&quot;cf056d…8cf707&quot;
+...
+</code></pre>
+<h2 id="暂停挖矿"><a class="header" href="#暂停挖矿">暂停挖矿</a></h2>
+<pre><code>&gt; miner.stop()
+
+// 查看账户余额：
+
+&gt; eth.getBalance(&quot;248672bac91964465...&quot;)
+1.009e+22 // 接收方： + 10 eth
+
+&gt; eth.getBalance(&quot;46e7328724a7b9...&quot;)
+1.0069999979e+22 // 发送方： - 10 eth - 转账费(gas * gasPrice)
+
+&gt; eth.getBalance(&quot;0x61d55D8015Aa01...&quot;)
+1.0190000021e+22 // 矿工： + 出块奖励(reward * blockNum) + 转账费(gas * gasPrice)
+
+</code></pre>
+<p>查看账户余额，可以确认转账成功</p>
+<h1 id="智能合约"><a class="header" href="#智能合约">智能合约</a></h1>
+<p>以太坊上创建和执行合约同样是通过发送交易的方式，只不过交易携带的数据多了合约字节码或者调用方法等信息</p>
+<h2 id="编写合约"><a class="header" href="#编写合约">编写合约</a></h2>
+<p>可以使用任何高级语言来编写智能合约，只要在部署的时候编译为以太坊虚拟机 EVM 可以执行的字节码即可</p>
+<p>使用 Solidity (https://soliditylang.org/) 语言编写的智能合约示例：</p>
+<pre><code class="language-js">// SPDX-License-Identifier: CC-BY-SA-4.0
+
+// Version of Solidity compiler this program was written for
+pragma solidity ^0.6.0;
+
+// Our first contract is a faucet!
+contract Faucet {
+    // Accept any incoming amount
+    receive () external payable {}
+    
+    // Give out ether to anyone who asks
+    function withdraw(uint withdraw_amount) public {
+
+        // Limit withdrawal amount
+        require(withdraw_amount &lt;= 100000000000000000);
+
+        // Send the amount to the address that requested it
+        msg.sender.transfer(withdraw_amount);
+    }
+}
+</code></pre>
+<blockquote>
+<p>Tips: 使用在线 IDE https://remix.ethereum.org/ 方便开发调试智能合约</p>
+</blockquote>
+<p>在 remix 上将合约编译生成字节码：</p>
+<pre><code>{
+  &quot;linkReferences&quot;: {},
+  &quot;object&quot;: &quot;608060405234801561001057600080fd5b5060f48061001f6000396000f3fe608060405260043610601f5760003560e01c80632e1a7d4d14602a576025565b36602557005b600080fd5b348015603557600080fd5b50605f60048036036020811015604a57600080fd5b81019080803590602001909291905050506061565b005b67016345785d8a0000811115607557600080fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f1935050505015801560ba573d6000803e3d6000fd5b505056fea26469706673582212207a2c9ed47daa046769d1020e307564fedff522d6340096ab14fa5829bd5f230764736f6c634300060c0033&quot;,
+  &quot;opcodes&quot;: &quot;PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH2 0x10 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0xF4 DUP1 PUSH2 0x1F PUSH1 0x0 CODECOPY PUSH1 0x0 RETURN INVALID PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH1 0x1F JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x2E1A7D4D EQ PUSH1 0x2A JUMPI PUSH1 0x25 JUMP JUMPDEST CALLDATASIZE PUSH1 0x25 JUMPI STOP JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST CALLVALUE DUP1 ISZERO PUSH1 0x35 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x5F PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH1 0x4A JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST DUP2 ADD SWAP1 DUP1 DUP1 CALLDATALOAD SWAP1 PUSH1 0x20 ADD SWAP1 SWAP3 SWAP2 SWAP1 POP POP POP PUSH1 0x61 JUMP JUMPDEST STOP JUMPDEST PUSH8 0x16345785D8A0000 DUP2 GT ISZERO PUSH1 0x75 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST CALLER PUSH20 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF AND PUSH2 0x8FC DUP3 SWAP1 DUP2 ISZERO MUL SWAP1 PUSH1 0x40 MLOAD PUSH1 0x0 PUSH1 0x40 MLOAD DUP1 DUP4 SUB DUP2 DUP6 DUP9 DUP9 CALL SWAP4 POP POP POP POP ISZERO DUP1 ISZERO PUSH1 0xBA JUMPI RETURNDATASIZE PUSH1 0x0 DUP1 RETURNDATACOPY RETURNDATASIZE PUSH1 0x0 REVERT JUMPDEST POP POP JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 PUSH27 0x2C9ED47DAA046769D1020E307564FEDFF522D6340096AB14FA5829 0xBD 0x5F 0x23 SMOD PUSH5 0x736F6C6343 STOP MOD 0xC STOP CALLER &quot;,
+  &quot;sourceMap&quot;: &quot;169:405:0:-:0;;;;;;;;;;;;;;;;;;;&quot;
+}
+</code></pre>
+<p>其中，<code>object</code> 字段就是交易携带的字节码数据</p>
+<h2 id="部署合约"><a class="header" href="#部署合约">部署合约</a></h2>
+<p>部署合约和转账交易方法一样，但参数只需 <code>from</code> 和 <code>data</code></p>
+<pre><code>&gt; eth.sendTransaction({from:&quot;46e7328724a7...&quot;,data:&quot;0x608060405234801561001057600080fd5b5060f48061001f6000396000f3fe608060405260043610601f5760003560e01c80632e1a7d4d14602a576025565b36602557005b600080fd5b348015603557600080fd5b50605f60048036036020811015604a57600080fd5b81019080803590602001909291905050506061565b005b67016345785d8a0000811115607557600080fd5b3373ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f1935050505015801560ba573d6000803e3d6000fd5b505056fea26469706673582212207a2c9ed47daa046769d1020e307564fedff522d6340096ab14fa5829bd5f230764736f6c634300060c0033&quot;})
+
+// 交易 hash
+&quot;0x5a90c06d0af12b921fa62efddfe3376b07c1ab0b820b3626016c5ead959d42a1&quot;
+
+// 参数：
+// from 交易发送方账户地址
+// data 上 part 编译生成的字节码，注意：附加了 0x 开头，表示 16 进制数据
+</code></pre>
+<h2 id="调用合约"><a class="header" href="#调用合约">调用合约</a></h2>
+<p>调用合约和转账交易方法一样，但参数只需 <code>from</code> <code>to</code>和 <code>data</code></p>
+<pre><code>&gt; eth.sendTransaction({from:&quot;46e7328724a...&quot;,to:&quot;37F5A36e1...&quot;,data:&quot;0x2e1a7d4d00000000000000000000000000000000000000000000000000000000000186a0&quot;})
+
+// 参数：
+// from 交易发送方账户地址
+// to 合约地址
+// data 合约调用信息的 abi 编码，注意：附加了 0x 开头，表示 16 进制数据
+</code></pre>
+<p>可以使用 <code>abidump</code> 解码查看 abi 信息：</p>
+<pre><code>$ ./abidump.exe 0x2e1a7d4d00000000000000000000000000000000000000000000000000000000000186a0
+
+Info: Transaction invokes the following method: &quot;withdraw(uint256: 100000)&quot;
+</code></pre>
+<h1 id="小结"><a class="header" href="#小结">小结</a></h1>
+<p>通过上述步骤，我们完成了以太坊本地开发环境的搭建，了解了创建账户、转账交易、部署和调用合约的基本过程</p>
+<p>接下来我们将深入代码细节，看看这些指令是如何具体执行的</p>
+<h2 id="参考内容"><a class="header" href="#参考内容">参考内容</a></h2>
+<ul>
+<li>https://eth.wiki/</li>
+<li>https://geth.ethereum.org/docs/</li>
+<li>https://docs.soliditylang.org/en/v0.8.4/</li>
+<li>https://web3js.readthedocs.io/en/v1.2.11/index.html</li>
+<li>https://documenter.getpostman.com/view/4117254/ethereum-json-rpc/RVu7CT5J?version=latest#150dbf79-b762-e585-c345-fc666da5e354</li>
+</ul>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="geth-命令及参数"><a class="header" href="#geth-命令及参数">Geth 命令及参数</a></h1>
+<pre><code class="language-shell">$ ./geth.exe --h
+
+NAME:
+   geth.exe - the go-ethereum command line interface
+
+   Copyright 2013-2021 The go-ethereum Authors
+
+USAGE:
+   geth.exe [options] [command] [command options] [arguments...]
+
+VERSION:
+   1.10.2-stable-97d11b01
+
+COMMANDS:
+   account                            Manage accounts
+   attach                             Start an interactive JavaScript environment (connect to node)
+   console                            Start an interactive JavaScript environment
+   db                                 Low level database operations
+   dump                               Dump a specific block from storage
+   dumpconfig                         Show configuration values
+   dumpgenesis                        Dumps genesis block JSON configuration to stdout
+   export                             Export blockchain into file
+   export-preimages                   Export the preimage database into an RLP stream
+   import                             Import a blockchain file
+   import-preimages                   Import the preimage database from an RLP stream
+   init                               Bootstrap and initialize a new genesis block
+   js                                 Execute the specified JavaScript files
+   license                            Display license information
+   makecache                          Generate ethash verification cache (for testing)
+   makedag                            Generate ethash mining DAG (for testing)
+   removedb                           Remove blockchain and state databases
+   show-deprecated-flags              Show flags that have been deprecated
+   snapshot                           A set of commands based on the snapshot
+   version                            Print version numbers
+   version-check                      Checks (online) whether the current version suffers from any known security vulnerabilities
+   wallet                             Manage Ethereum presale wallets
+   help, h                            Shows a list of commands or help for one command
+
+ETHEREUM OPTIONS:
+  --config value                      TOML configuration file
+  --datadir value                     Data directory for the databases and keystore (default: &quot;C:\\Users\\chenwei207865\\AppData\\Local\\Ethereum&quot;)
+  --datadir.ancient value             Data directory for ancient chain segments (default = inside chaindata)
+  --datadir.minfreedisk value         Minimum free disk space in MB, once reached triggers auto shut down (default = --cache.gc converted to MB, 0 = disabled)
+  --keystore value                    Directory for the keystore (default = inside the datadir)
+  --usb                               Enable monitoring and management of USB hardware wallets
+  --pcscdpath value                   Path to the smartcard daemon (pcscd) socket file
+  --networkid value                   Explicitly set network id (integer)(For testnets: use --ropsten, --rinkeby, --goerli instead) (default: 1)
+  --mainnet                           Ethereum mainnet
+  --goerli                            Görli network: pre-configured proof-of-authority test network
+  --rinkeby                           Rinkeby network: pre-configured proof-of-authority test network
+  --yolov3                            YOLOv3 network: pre-configured proof-of-authority shortlived test network.
+  --ropsten                           Ropsten network: pre-configured proof-of-work test network
+  --syncmode value                    Blockchain sync mode (&quot;fast&quot;, &quot;full&quot;, &quot;snap&quot; or &quot;light&quot;) (default: fast)
+  --exitwhensynced                    Exits after block synchronisation completes
+  --gcmode value                      Blockchain garbage collection mode (&quot;full&quot;, &quot;archive&quot;) (default: &quot;full&quot;)
+  --txlookuplimit value               Number of recent blocks to maintain transactions index for (default = about one year, 0 = entire chain) (default: 2350000)
+  --ethstats value                    Reporting URL of a ethstats service (nodename:secret@host:port)
+  --identity value                    Custom node name
+  --lightkdf                          Reduce key-derivation RAM &amp; CPU usage at some expense of KDF strength
+  --whitelist value                   Comma separated block number-to-hash mappings to enforce (&lt;number&gt;=&lt;hash&gt;)
+
+LIGHT CLIENT OPTIONS:
+  --light.serve value                 Maximum percentage of time allowed for serving LES requests (multi-threaded processing allows values over 100) (default: 0)
+  --light.ingress value               Incoming bandwidth limit for serving light clients (kilobytes/sec, 0 = unlimited) (default: 0)
+  --light.egress value                Outgoing bandwidth limit for serving light clients (kilobytes/sec, 0 = unlimited) (default: 0)
+  --light.maxpeers value              Maximum number of light clients to serve, or light servers to attach to (default: 100)
+  --ulc.servers value                 List of trusted ultra-light servers
+  --ulc.fraction value                Minimum % of trusted ultra-light servers required to announce a new head (default: 75)
+  --ulc.onlyannounce                  Ultra light server sends announcements only
+  --light.nopruning                   Disable ancient light chain data pruning
+  --light.nosyncserve                 Enables serving light clients before syncing
+
+DEVELOPER CHAIN OPTIONS:
+  --dev                               Ephemeral proof-of-authority network with a pre-funded developer account, mining enabled
+  --dev.period value                  Block period to use in developer mode (0 = mine only if transaction pending) (default: 0)
+
+ETHASH OPTIONS:
+  --ethash.cachedir value             Directory to store the ethash verification caches (default = inside the datadir)
+  --ethash.cachesinmem value          Number of recent ethash caches to keep in memory (16MB each) (default: 2)
+  --ethash.cachesondisk value         Number of recent ethash caches to keep on disk (16MB each) (default: 3)
+  --ethash.cacheslockmmap             Lock memory maps of recent ethash caches
+  --ethash.dagdir value               Directory to store the ethash mining DAGs (default: &quot;C:\\Users\\chenwei207865\\AppData\\Local\\Ethash&quot;)
+  --ethash.dagsinmem value            Number of recent ethash mining DAGs to keep in memory (1+GB each) (default: 1)
+  --ethash.dagsondisk value           Number of recent ethash mining DAGs to keep on disk (1+GB each) (default: 2)
+  --ethash.dagslockmmap               Lock memory maps for recent ethash mining DAGs
+
+TRANSACTION POOL OPTIONS:
+  --txpool.locals value               Comma separated accounts to treat as locals (no flush, priority inclusion)
+  --txpool.nolocals                   Disables price exemptions for locally submitted transactions
+  --txpool.journal value              Disk journal for local transaction to survive node restarts (default: &quot;transactions.rlp&quot;)
+  --txpool.rejournal value            Time interval to regenerate the local transaction journal (default: 1h0m0s)
+  --txpool.pricelimit value           Minimum gas price limit to enforce for acceptance into the pool (default: 1)
+  --txpool.pricebump value            Price bump percentage to replace an already existing transaction (default: 10)
+  --txpool.accountslots value         Minimum number of executable transaction slots guaranteed per account (default: 16)
+  --txpool.globalslots value          Maximum number of executable transaction slots for all accounts (default: 4096)
+  --txpool.accountqueue value         Maximum number of non-executable transaction slots permitted per account (default: 64)
+  --txpool.globalqueue value          Maximum number of non-executable transaction slots for all accounts (default: 1024)
+  --txpool.lifetime value             Maximum amount of time non-executable transaction are queued (default: 3h0m0s)
+
+PERFORMANCE TUNING OPTIONS:
+  --cache value                       Megabytes of memory allocated to internal caching (default = 4096 mainnet full node, 128 light mode) (default: 1024)
+  --cache.database value              Percentage of cache memory allowance to use for database io (default: 50)
+  --cache.trie value                  Percentage of cache memory allowance to use for trie caching (default = 15% full mode, 30% archive mode) (default: 15)
+  --cache.trie.journal value          Disk journal directory for trie cache to survive node restarts (default: &quot;triecache&quot;)
+  --cache.trie.rejournal value        Time interval to regenerate the trie cache journal (default: 1h0m0s)
+  --cache.gc value                    Percentage of cache memory allowance to use for trie pruning (default = 25% full mode, 0% archive mode) (default: 25)
+  --cache.snapshot value              Percentage of cache memory allowance to use for snapshot caching (default = 10% full mode, 20% archive mode) (default: 10)
+  --cache.noprefetch                  Disable heuristic state prefetch during block import (less CPU and disk IO, more time waiting for data)
+  --cache.preimages                   Enable recording the SHA3/keccak preimages of trie keys
+
+ACCOUNT OPTIONS:
+  --unlock value                      Comma separated list of accounts to unlock
+  --password value                    Password file to use for non-interactive password input
+  --signer value                      External signer (url or path to ipc file)
+  --allow-insecure-unlock             Allow insecure account unlocking when account-related RPCs are exposed by http
+
+API AND CONSOLE OPTIONS:
+  --ipcdisable                        Disable the IPC-RPC server
+  --ipcpath value                     Filename for IPC socket/pipe within the datadir (explicit paths escape it)
+  --http                              Enable the HTTP-RPC server
+  --http.addr value                   HTTP-RPC server listening interface (default: &quot;localhost&quot;)
+  --http.port value                   HTTP-RPC server listening port (default: 8545)
+  --http.api value                    API's offered over the HTTP-RPC interface
+  --http.rpcprefix value              HTTP path path prefix on which JSON-RPC is served. Use '/' to serve on all paths.
+  --http.corsdomain value             Comma separated list of domains from which to accept cross origin requests (browser enforced)
+  --http.vhosts value                 Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. (default: &quot;localhost&quot;)
+  --ws                                Enable the WS-RPC server
+  --ws.addr value                     WS-RPC server listening interface (default: &quot;localhost&quot;)
+  --ws.port value                     WS-RPC server listening port (default: 8546)
+  --ws.api value                      API's offered over the WS-RPC interface
+  --ws.rpcprefix value                HTTP path prefix on which JSON-RPC is served. Use '/' to serve on all paths.
+  --ws.origins value                  Origins from which to accept websockets requests
+  --graphql                           Enable GraphQL on the HTTP-RPC server. Note that GraphQL can only be started if an HTTP server is started as well.
+  --graphql.corsdomain value          Comma separated list of domains from which to accept cross origin requests (browser enforced)
+  --graphql.vhosts value              Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. (default: &quot;localhost&quot;)
+  --rpc.gascap value                  Sets a cap on gas that can be used in eth_call/estimateGas (0=infinite) (default: 25000000)
+  --rpc.txfeecap value                Sets a cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap) (default: 1)
+  --rpc.allow-unprotected-txs         Allow for unprotected (non EIP155 signed) transactions to be submitted via RPC
+  --jspath loadScript                 JavaScript root path for loadScript (default: &quot;.&quot;)
+  --exec value                        Execute JavaScript statement
+  --preload value                     Comma separated list of JavaScript files to preload into the console
+
+NETWORKING OPTIONS:
+  --bootnodes value                   Comma separated enode URLs for P2P discovery bootstrap
+  --discovery.dns value               Sets DNS discovery entry points (use &quot;&quot; to disable DNS)
+  --port value                        Network listening port (default: 30303)
+  --maxpeers value                    Maximum number of network peers (network disabled if set to 0) (default: 50)
+  --maxpendpeers value                Maximum number of pending connection attempts (defaults used if set to 0) (default: 0)
+  --nat value                         NAT port mapping mechanism (any|none|upnp|pmp|extip:&lt;IP&gt;) (default: &quot;any&quot;)
+  --nodiscover                        Disables the peer discovery mechanism (manual peer addition)
+  --v5disc                            Enables the experimental RLPx V5 (Topic Discovery) mechanism
+  --netrestrict value                 Restricts network communication to the given IP networks (CIDR masks)
+  --nodekey value                     P2P node key file
+  --nodekeyhex value                  P2P node key as hex (for testing)
+
+MINER OPTIONS:
+  --mine                              Enable mining
+  --miner.threads value               Number of CPU threads to use for mining (default: 0)
+  --miner.notify value                Comma separated HTTP URL list to notify of new work packages
+  --miner.notify.full                 Notify with pending block headers instead of work packages
+  --miner.gasprice value              Minimum gas price for mining a transaction (default: 1000000000)
+  --miner.gastarget value             Target gas floor for mined blocks (default: 8000000)
+  --miner.gaslimit value              Target gas ceiling for mined blocks (default: 8000000)
+  --miner.etherbase value             Public address for block mining rewards (default = first account) (default: &quot;0&quot;)
+  --miner.extradata value             Block extra data set by the miner (default = client version)
+  --miner.recommit value              Time interval to recreate the block being mined (default: 3s)
+  --miner.noverify                    Disable remote sealing verification
+
+GAS PRICE ORACLE OPTIONS:
+  --gpo.blocks value                  Number of recent blocks to check for gas prices (default: 20)
+  --gpo.percentile value              Suggested gas price is the given percentile of a set of recent transaction gas prices (default: 60)
+  --gpo.maxprice value                Maximum gas price will be recommended by gpo (default: 500000000000)
+
+VIRTUAL MACHINE OPTIONS:
+  --vmdebug                           Record information useful for VM and contract debugging
+  --vm.evm value                      External EVM configuration (default = built-in interpreter)
+  --vm.ewasm value                    External ewasm configuration (default = built-in interpreter)
+
+LOGGING AND DEBUGGING OPTIONS:
+  --fakepow                           Disables proof-of-work verification
+  --nocompaction                      Disables db compaction after import
+  --verbosity value                   Logging verbosity: 0=silent, 1=error, 2=warn, 3=info, 4=debug, 5=detail (default: 3)
+  --vmodule value                     Per-module verbosity: comma-separated list of &lt;pattern&gt;=&lt;level&gt; (e.g. eth/*=5,p2p=4)
+  --log.json                          Format logs with JSON
+  --log.backtrace value               Request a stack trace at a specific logging statement (e.g. &quot;block.go:271&quot;)
+  --log.debug                         Prepends log messages with call-site location (file and line number)
+  --pprof                             Enable the pprof HTTP server
+  --pprof.addr value                  pprof HTTP server listening interface (default: &quot;127.0.0.1&quot;)
+  --pprof.port value                  pprof HTTP server listening port (default: 6060)
+  --pprof.memprofilerate value        Turn on memory profiling with the given rate (default: 524288)
+  --pprof.blockprofilerate value      Turn on block profiling with the given rate (default: 0)
+  --pprof.cpuprofile value            Write CPU profile to the given file
+  --trace value                       Write execution trace to the given file
+
+METRICS AND STATS OPTIONS:
+  --metrics                           Enable metrics collection and reporting
+  --metrics.expensive                 Enable expensive metrics collection and reporting
+  --metrics.addr value                Enable stand-alone metrics HTTP server listening interface (default: &quot;127.0.0.1&quot;)
+  --metrics.port value                Metrics HTTP server listening port (default: 6060)
+  --metrics.influxdb                  Enable metrics export/push to an external InfluxDB database
+  --metrics.influxdb.endpoint value   InfluxDB API endpoint to report metrics to (default: &quot;http://localhost:8086&quot;)
+  --metrics.influxdb.database value   InfluxDB database name to push reported metrics to (default: &quot;geth&quot;)
+  --metrics.influxdb.username value   Username to authorize access to the database (default: &quot;test&quot;)
+  --metrics.influxdb.password value   Password to authorize access to the database (default: &quot;test&quot;)
+  --metrics.influxdb.tags value       Comma-separated InfluxDB tags (key/values) attached to all measurements (default: &quot;host=localhost&quot;)
+
+ALIASED (deprecated) OPTIONS:
+  --nousb                             Disables monitoring for and managing USB hardware wallets (deprecated)
+  --rpc                               Enable the HTTP-RPC server (deprecated and will be removed June 2021, use --http)
+  --rpcaddr value                     HTTP-RPC server listening interface (deprecated and will be removed June 2021, use --http.addr) (default: &quot;localhost&quot;)
+  --rpcport value                     HTTP-RPC server listening port (deprecated and will be removed June 2021, use --http.port) (default: 8545)
+  --rpccorsdomain value               Comma separated list of domains from which to accept cross origin requests (browser enforced) (deprecated and will be removed June 2021, use --http.corsdomain)
+  --rpcvhosts value                   Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard. (deprecated and will be removed June 2021, use --http.vhosts) (default: &quot;localhos
+t&quot;)
+  --rpcapi value                      API's offered over the HTTP-RPC interface (deprecated and will be removed June 2021, use --http.api)
+
+MISC OPTIONS:
+  --snapshot                          Enables snapshot-database mode (default = enable)
+  --bloomfilter.size value            Megabytes of memory allocated to bloom-filter for pruning (default: 2048)
+  --help, -h                          show help
+  --override.berlin value             Manually specify Berlin fork-block, overriding the bundled setting (default: 0)
+
+
+COPYRIGHT:
+   Copyright 2013-2021 The go-ethereum Authors
+
+</code></pre>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="打印输出所有注册的接口"><a class="header" href="#打印输出所有注册的接口">打印输出所有注册的接口</a></h1>
+<p>为了方便观察 rpc 接口与对应的实现，我们在 <code>func (r *serviceRegistry) registerName(name string, rcvr interface{})</code> 注册的时候，注入一段打印接口详情的代码：</p>
+<pre><code class="language-go">var uniqMap = map[string]bool{}
+func (r *serviceRegistry) registerName(name string, rcvr interface{}) error {
+	rcvrVal := reflect.ValueOf(rcvr)
+	if name == &quot;&quot; {
+		return fmt.Errorf(&quot;no service name for type %s&quot;, rcvrVal.Type().String())
+	}
+
+	// 输出所有注册的接口
+	fmt.Printf(&quot;\n\n&quot;)
+	func (receiver reflect.Value, namespace string) {
+		typ := receiver.Type()
+		for m := 0; m &lt; typ.NumMethod(); m++ {
+			method := typ.Method(m)
+			if method.PkgPath != &quot;&quot; {
+				continue // method not exported
+			}
+
+			// 滤重
+			if uniqMap[namespace+method.Name] {
+				continue
+			}
+
+			cb := newCallback(receiver, method.Func)
+			if cb == nil {
+				continue // function invalid
+			}
+
+			var args []string
+			for _, argType := range cb.argTypes {
+				args = append(args, argType.String())
+			}
+			api := namespace+&quot;.&quot;+formatName(method.Name)
+			if l := len(api); l &lt; 42 {
+				space := &quot;&quot;
+				for i := 0; i &lt; 42-l; i++ {
+					space += &quot; &quot;
+				}
+				api = api + space
+			}
+			fmt.Printf(&quot;\n%s =&gt; func (%s) %s(%s) // isSubscribe:%v&quot;, api,receiver.Type().String(), method.Name, strings.Join(args,&quot;, &quot;),cb.isSubscribe)
+
+			uniqMap[namespace+method.Name] = true
+		}
+
+	}(rcvrVal, name)
+    ......
+    ......
+</code></pre>
+<h1 id="rpc-接口与实现对应列表"><a class="header" href="#rpc-接口与实现对应列表">rpc 接口与实现对应列表</a></h1>
+<p>有了这份列表数据后，我们就可以快速地查找 rpc 接口对应的具体实现，方便开发调试</p>
+<p>需要注意的是，函数 receiver 名称带有 <code>Private</code> 的表示私有接口，不能通过 http/WebSocket 方式调用，只能通过 ipc 方式调用</p>
+<p><code>isSubscribe:true</code> 表示可以通过建立长连接订阅事件</p>
+<pre><code class="language-js">rpc.modules                                =&gt; func (*rpc.RPCService) Modules() // isSubscribe:false
+
+admin.addPeer                              =&gt; func (*node.privateAdminAPI) AddPeer(string) // isSubscribe:false
+admin.addTrustedPeer                       =&gt; func (*node.privateAdminAPI) AddTrustedPeer(string) // isSubscribe:false
+admin.peerEvents                           =&gt; func (*node.privateAdminAPI) PeerEvents() // isSubscribe:true
+admin.removePeer                           =&gt; func (*node.privateAdminAPI) RemovePeer(string) // isSubscribe:false
+admin.removeTrustedPeer                    =&gt; func (*node.privateAdminAPI) RemoveTrustedPeer(string) // isSubscribe:false
+admin.startHTTP                            =&gt; func (*node.privateAdminAPI) StartHTTP(*string, *int, *string, *string, *string) // isSubscribe:false
+admin.startRPC                             =&gt; func (*node.privateAdminAPI) StartRPC(*string, *int, *string, *string, *string) // isSubscribe:false
+admin.startWS                              =&gt; func (*node.privateAdminAPI) StartWS(*string, *int, *string, *string) // isSubscribe:false
+admin.stopHTTP                             =&gt; func (*node.privateAdminAPI) StopHTTP() // isSubscribe:false
+admin.stopRPC                              =&gt; func (*node.privateAdminAPI) StopRPC() // isSubscribe:false
+admin.stopWS                               =&gt; func (*node.privateAdminAPI) StopWS() // isSubscribe:false
+
+
+admin.datadir                              =&gt; func (*node.publicAdminAPI) Datadir() // isSubscribe:false
+admin.nodeInfo                             =&gt; func (*node.publicAdminAPI) NodeInfo() // isSubscribe:false
+admin.peers                                =&gt; func (*node.publicAdminAPI) Peers() // isSubscribe:false
+
+
+debug.backtraceAt                          =&gt; func (*debug.HandlerT) BacktraceAt(string) // isSubscribe:false
+debug.blockProfile                         =&gt; func (*debug.HandlerT) BlockProfile(string, uint) // isSubscribe:false
+debug.cpuProfile                           =&gt; func (*debug.HandlerT) CpuProfile(string, uint) // isSubscribe:false
+debug.freeOSMemory                         =&gt; func (*debug.HandlerT) FreeOSMemory() // isSubscribe:false
+debug.gcStats                              =&gt; func (*debug.HandlerT) GcStats() // isSubscribe:false
+debug.goTrace                              =&gt; func (*debug.HandlerT) GoTrace(string, uint) // isSubscribe:false
+debug.memStats                             =&gt; func (*debug.HandlerT) MemStats() // isSubscribe:false
+debug.mutexProfile                         =&gt; func (*debug.HandlerT) MutexProfile(string, uint) // isSubscribe:false
+debug.setBlockProfileRate                  =&gt; func (*debug.HandlerT) SetBlockProfileRate(int) // isSubscribe:false
+debug.setGCPercent                         =&gt; func (*debug.HandlerT) SetGCPercent(int) // isSubscribe:false
+debug.setMutexProfileFraction              =&gt; func (*debug.HandlerT) SetMutexProfileFraction(int) // isSubscribe:false
+debug.stacks                               =&gt; func (*debug.HandlerT) Stacks() // isSubscribe:false
+debug.startCPUProfile                      =&gt; func (*debug.HandlerT) StartCPUProfile(string) // isSubscribe:false
+debug.startGoTrace                         =&gt; func (*debug.HandlerT) StartGoTrace(string) // isSubscribe:false
+debug.stopCPUProfile                       =&gt; func (*debug.HandlerT) StopCPUProfile() // isSubscribe:false
+debug.stopGoTrace                          =&gt; func (*debug.HandlerT) StopGoTrace() // isSubscribe:false
+debug.verbosity                            =&gt; func (*debug.HandlerT) Verbosity(int) // isSubscribe:false
+debug.vmodule                              =&gt; func (*debug.HandlerT) Vmodule(string) // isSubscribe:false
+debug.writeBlockProfile                    =&gt; func (*debug.HandlerT) WriteBlockProfile(string) // isSubscribe:false
+debug.writeMemProfile                      =&gt; func (*debug.HandlerT) WriteMemProfile(string) // isSubscribe:false
+debug.writeMutexProfile                    =&gt; func (*debug.HandlerT) WriteMutexProfile(string) // isSubscribe:false
+
+
+web3.clientVersion                         =&gt; func (*node.publicWeb3API) ClientVersion() // isSubscribe:false
+web3.sha3                                  =&gt; func (*node.publicWeb3API) Sha3(hexutil.Bytes) // isSubscribe:false
+
+
+eth.gasPrice                               =&gt; func (*ethapi.PublicEthereumAPI) GasPrice() // isSubscribe:false
+eth.syncing                                =&gt; func (*ethapi.PublicEthereumAPI) Syncing() // isSubscribe:false
+
+
+eth.blockNumber                            =&gt; func (*ethapi.PublicBlockChainAPI) BlockNumber() // isSubscribe:false
+eth.call                                   =&gt; func (*ethapi.PublicBlockChainAPI) Call(ethapi.CallArgs, rpc.BlockNumberOrHash, *map[common.Address]ethapi.account) // isSubscribe:false
+eth.chainId                                =&gt; func (*ethapi.PublicBlockChainAPI) ChainId() // isSubscribe:false
+eth.createAccessList                       =&gt; func (*ethapi.PublicBlockChainAPI) CreateAccessList(ethapi.SendTxArgs, *rpc.BlockNumberOrHash) // isSubscribe:false
+eth.estimateGas                            =&gt; func (*ethapi.PublicBlockChainAPI) EstimateGas(ethapi.CallArgs, *rpc.BlockNumberOrHash) // isSubscribe:false
+eth.getBalance                             =&gt; func (*ethapi.PublicBlockChainAPI) GetBalance(common.Address, rpc.BlockNumberOrHash) // isSubscribe:false
+eth.getBlockByHash                         =&gt; func (*ethapi.PublicBlockChainAPI) GetBlockByHash(common.Hash, bool) // isSubscribe:false
+eth.getBlockByNumber                       =&gt; func (*ethapi.PublicBlockChainAPI) GetBlockByNumber(rpc.BlockNumber, bool) // isSubscribe:false
+eth.getCode                                =&gt; func (*ethapi.PublicBlockChainAPI) GetCode(common.Address, rpc.BlockNumberOrHash) // isSubscribe:false
+eth.getHeaderByHash                        =&gt; func (*ethapi.PublicBlockChainAPI) GetHeaderByHash(common.Hash) // isSubscribe:false
+eth.getHeaderByNumber                      =&gt; func (*ethapi.PublicBlockChainAPI) GetHeaderByNumber(rpc.BlockNumber) // isSubscribe:false
+eth.getProof                               =&gt; func (*ethapi.PublicBlockChainAPI) GetProof(common.Address, []string, rpc.BlockNumberOrHash) // isSubscribe:false
+eth.getStorageAt                           =&gt; func (*ethapi.PublicBlockChainAPI) GetStorageAt(common.Address, string, rpc.BlockNumberOrHash) // isSubscribe:false
+eth.getUncleByBlockHashAndIndex            =&gt; func (*ethapi.PublicBlockChainAPI) GetUncleByBlockHashAndIndex(common.Hash, hexutil.Uint) // isSubscribe:false
+eth.getUncleByBlockNumberAndIndex          =&gt; func (*ethapi.PublicBlockChainAPI) GetUncleByBlockNumberAndIndex(rpc.BlockNumber, hexutil.Uint) // isSubscribe:false
+eth.getUncleCountByBlockHash               =&gt; func (*ethapi.PublicBlockChainAPI) GetUncleCountByBlockHash(common.Hash) // isSubscribe:false
+eth.getUncleCountByBlockNumber             =&gt; func (*ethapi.PublicBlockChainAPI) GetUncleCountByBlockNumber(rpc.BlockNumber) // isSubscribe:false
+
+
+eth.fillTransaction                        =&gt; func (*ethapi.PublicTransactionPoolAPI) FillTransaction(ethapi.SendTxArgs) // isSubscribe:false
+eth.getBlockTransactionCountByHash         =&gt; func (*ethapi.PublicTransactionPoolAPI) GetBlockTransactionCountByHash(common.Hash) // isSubscribe:false
+eth.getBlockTransactionCountByNumber       =&gt; func (*ethapi.PublicTransactionPoolAPI) GetBlockTransactionCountByNumber(rpc.BlockNumber) // isSubscribe:false
+eth.getRawTransactionByBlockHashAndIndex   =&gt; func (*ethapi.PublicTransactionPoolAPI) GetRawTransactionByBlockHashAndIndex(common.Hash, hexutil.Uint) // isSubscribe:false
+eth.getRawTransactionByBlockNumberAndIndex =&gt; func (*ethapi.PublicTransactionPoolAPI) GetRawTransactionByBlockNumberAndIndex(rpc.BlockNumber, hexutil.Uint) // isSubscribe:false
+eth.getRawTransactionByHash                =&gt; func (*ethapi.PublicTransactionPoolAPI) GetRawTransactionByHash(common.Hash) // isSubscribe:false
+eth.getTransactionByBlockHashAndIndex      =&gt; func (*ethapi.PublicTransactionPoolAPI) GetTransactionByBlockHashAndIndex(common.Hash, hexutil.Uint) // isSubscribe:false
+eth.getTransactionByBlockNumberAndIndex    =&gt; func (*ethapi.PublicTransactionPoolAPI) GetTransactionByBlockNumberAndIndex(rpc.BlockNumber, hexutil.Uint) // isSubscribe:false
+eth.getTransactionByHash                   =&gt; func (*ethapi.PublicTransactionPoolAPI) GetTransactionByHash(common.Hash) // isSubscribe:false
+eth.getTransactionCount                    =&gt; func (*ethapi.PublicTransactionPoolAPI) GetTransactionCount(common.Address, rpc.BlockNumberOrHash) // isSubscribe:false
+eth.getTransactionReceipt                  =&gt; func (*ethapi.PublicTransactionPoolAPI) GetTransactionReceipt(common.Hash) // isSubscribe:false
+eth.pendingTransactions                    =&gt; func (*ethapi.PublicTransactionPoolAPI) PendingTransactions() // isSubscribe:false
+eth.resend                                 =&gt; func (*ethapi.PublicTransactionPoolAPI) Resend(ethapi.SendTxArgs, *hexutil.Big, *hexutil.Uint64) // isSubscribe:false
+eth.sendRawTransaction                     =&gt; func (*ethapi.PublicTransactionPoolAPI) SendRawTransaction(hexutil.Bytes) // isSubscribe:false
+eth.sendTransaction                        =&gt; func (*ethapi.PublicTransactionPoolAPI) SendTransaction(ethapi.SendTxArgs) // isSubscribe:false
+eth.sign                                   =&gt; func (*ethapi.PublicTransactionPoolAPI) Sign(common.Address, hexutil.Bytes) // isSubscribe:false
+eth.signTransaction                        =&gt; func (*ethapi.PublicTransactionPoolAPI) SignTransaction(ethapi.SendTxArgs) // isSubscribe:false
+
+
+txpool.content                             =&gt; func (*ethapi.PublicTxPoolAPI) Content() // isSubscribe:false
+txpool.inspect                             =&gt; func (*ethapi.PublicTxPoolAPI) Inspect() // isSubscribe:false
+txpool.status                              =&gt; func (*ethapi.PublicTxPoolAPI) Status() // isSubscribe:false
+
+
+debug.getBlockRlp                          =&gt; func (*ethapi.PublicDebugAPI) GetBlockRlp(uint64) // isSubscribe:false
+debug.printBlock                           =&gt; func (*ethapi.PublicDebugAPI) PrintBlock(uint64) // isSubscribe:false
+debug.seedHash                             =&gt; func (*ethapi.PublicDebugAPI) SeedHash(uint64) // isSubscribe:false
+debug.testSignCliqueBlock                  =&gt; func (*ethapi.PublicDebugAPI) TestSignCliqueBlock(common.Address, uint64) // isSubscribe:false
+
+
+debug.chaindbCompact                       =&gt; func (*ethapi.PrivateDebugAPI) ChaindbCompact() // isSubscribe:false
+debug.chaindbProperty                      =&gt; func (*ethapi.PrivateDebugAPI) ChaindbProperty(string) // isSubscribe:false
+debug.setHead                              =&gt; func (*ethapi.PrivateDebugAPI) SetHead(hexutil.Uint64) // isSubscribe:false
+
+
+eth.accounts                               =&gt; func (*ethapi.PublicAccountAPI) Accounts() // isSubscribe:false
+
+
+personal.deriveAccount                     =&gt; func (*ethapi.PrivateAccountAPI) DeriveAccount(string, string, *bool) // isSubscribe:false
+personal.ecRecover                         =&gt; func (*ethapi.PrivateAccountAPI) EcRecover(hexutil.Bytes, hexutil.Bytes) // isSubscribe:false
+personal.importRawKey                      =&gt; func (*ethapi.PrivateAccountAPI) ImportRawKey(string, string) // isSubscribe:false
+personal.initializeWallet                  =&gt; func (*ethapi.PrivateAccountAPI) InitializeWallet(string) // isSubscribe:false
+personal.listAccounts                      =&gt; func (*ethapi.PrivateAccountAPI) ListAccounts() // isSubscribe:false
+personal.listWallets                       =&gt; func (*ethapi.PrivateAccountAPI) ListWallets() // isSubscribe:false
+personal.lockAccount                       =&gt; func (*ethapi.PrivateAccountAPI) LockAccount(common.Address) // isSubscribe:false
+personal.newAccount                        =&gt; func (*ethapi.PrivateAccountAPI) NewAccount(string) // isSubscribe:false
+personal.openWallet                        =&gt; func (*ethapi.PrivateAccountAPI) OpenWallet(string, *string) // isSubscribe:false
+personal.sendTransaction                   =&gt; func (*ethapi.PrivateAccountAPI) SendTransaction(ethapi.SendTxArgs, string) // isSubscribe:false
+personal.sign                              =&gt; func (*ethapi.PrivateAccountAPI) Sign(hexutil.Bytes, common.Address, string) // isSubscribe:false
+personal.signAndSendTransaction            =&gt; func (*ethapi.PrivateAccountAPI) SignAndSendTransaction(ethapi.SendTxArgs, string) // isSubscribe:false
+personal.signTransaction                   =&gt; func (*ethapi.PrivateAccountAPI) SignTransaction(ethapi.SendTxArgs, string) // isSubscribe:false
+personal.unlockAccount                     =&gt; func (*ethapi.PrivateAccountAPI) UnlockAccount(common.Address, string, *uint64) // isSubscribe:false
+personal.unpair                            =&gt; func (*ethapi.PrivateAccountAPI) Unpair(string, string) // isSubscribe:false
+
+
+eth.getHashrate                            =&gt; func (*ethash.API) GetHashrate() // isSubscribe:false
+eth.getWork                                =&gt; func (*ethash.API) GetWork() // isSubscribe:false
+eth.submitHashrate                         =&gt; func (*ethash.API) SubmitHashrate(hexutil.Uint64, common.Hash) // isSubscribe:false
+eth.submitWork                             =&gt; func (*ethash.API) SubmitWork(types.BlockNonce, common.Hash, common.Hash) // isSubscribe:false
+
+
+ethash.getHashrate                         =&gt; func (*ethash.API) GetHashrate() // isSubscribe:false
+ethash.getWork                             =&gt; func (*ethash.API) GetWork() // isSubscribe:false
+ethash.submitHashrate                      =&gt; func (*ethash.API) SubmitHashrate(hexutil.Uint64, common.Hash) // isSubscribe:false
+ethash.submitWork                          =&gt; func (*ethash.API) SubmitWork(types.BlockNonce, common.Hash, common.Hash) // isSubscribe:false
+
+
+eth.coinbase                               =&gt; func (*eth.PublicEthereumAPI) Coinbase() // isSubscribe:false
+eth.etherbase                              =&gt; func (*eth.PublicEthereumAPI) Etherbase() // isSubscribe:false
+
+
+eth.mining                                 =&gt; func (*eth.PublicMinerAPI) Mining() // isSubscribe:false
+
+
+eth.subscribeSyncStatus                    =&gt; func (*downloader.PublicDownloaderAPI) SubscribeSyncStatus(chan interface {}) // isSubscribe:false
+
+
+miner.setEtherbase                         =&gt; func (*eth.PrivateMinerAPI) SetEtherbase(common.Address) // isSubscribe:false
+miner.setExtra                             =&gt; func (*eth.PrivateMinerAPI) SetExtra(string) // isSubscribe:false
+miner.setGasPrice                          =&gt; func (*eth.PrivateMinerAPI) SetGasPrice(hexutil.Big) // isSubscribe:false
+miner.setRecommitInterval                  =&gt; func (*eth.PrivateMinerAPI) SetRecommitInterval(int) // isSubscribe:false
+miner.start                                =&gt; func (*eth.PrivateMinerAPI) Start(*int) // isSubscribe:false
+miner.stop                                 =&gt; func (*eth.PrivateMinerAPI) Stop() // isSubscribe:false
+
+
+eth.getFilterChanges                       =&gt; func (*filters.PublicFilterAPI) GetFilterChanges(rpc.ID) // isSubscribe:false
+eth.getFilterLogs                          =&gt; func (*filters.PublicFilterAPI) GetFilterLogs(rpc.ID) // isSubscribe:false
+eth.getLogs                                =&gt; func (*filters.PublicFilterAPI) GetLogs(filters.FilterCriteria) // isSubscribe:false
+eth.logs                                   =&gt; func (*filters.PublicFilterAPI) Logs(filters.FilterCriteria) // isSubscribe:true
+eth.newBlockFilter                         =&gt; func (*filters.PublicFilterAPI) NewBlockFilter() // isSubscribe:false
+eth.newFilter                              =&gt; func (*filters.PublicFilterAPI) NewFilter(filters.FilterCriteria) // isSubscribe:false
+eth.newHeads                               =&gt; func (*filters.PublicFilterAPI) NewHeads() // isSubscribe:true
+eth.newPendingTransactionFilter            =&gt; func (*filters.PublicFilterAPI) NewPendingTransactionFilter() // isSubscribe:false
+eth.newPendingTransactions                 =&gt; func (*filters.PublicFilterAPI) NewPendingTransactions() // isSubscribe:true
+eth.uninstallFilter                        =&gt; func (*filters.PublicFilterAPI) UninstallFilter(rpc.ID) // isSubscribe:false
+
+
+admin.exportChain                          =&gt; func (*eth.PrivateAdminAPI) ExportChain(string, *uint64, *uint64) // isSubscribe:false
+admin.importChain                          =&gt; func (*eth.PrivateAdminAPI) ImportChain(string) // isSubscribe:false
+
+
+debug.accountRange                         =&gt; func (*eth.PublicDebugAPI) AccountRange(rpc.BlockNumberOrHash, []uint8, int, bool, bool, bool) // isSubscribe:false
+debug.dumpBlock                            =&gt; func (*eth.PublicDebugAPI) DumpBlock(rpc.BlockNumber) // isSubscribe:false
+
+
+debug.getBadBlocks                         =&gt; func (*eth.PrivateDebugAPI) GetBadBlocks() // isSubscribe:false
+debug.getModifiedAccountsByHash            =&gt; func (*eth.PrivateDebugAPI) GetModifiedAccountsByHash(common.Hash, *common.Hash) // isSubscribe:false
+debug.getModifiedAccountsByNumber          =&gt; func (*eth.PrivateDebugAPI) GetModifiedAccountsByNumber(uint64, *uint64) // isSubscribe:false
+debug.preimage                             =&gt; func (*eth.PrivateDebugAPI) Preimage(common.Hash) // isSubscribe:false
+debug.storageRangeAt                       =&gt; func (*eth.PrivateDebugAPI) StorageRangeAt(common.Hash, int, common.Address, hexutil.Bytes, int) // isSubscribe:false
+
+
+net.listening                              =&gt; func (*ethapi.PublicNetAPI) Listening() // isSubscribe:false
+net.peerCount                              =&gt; func (*ethapi.PublicNetAPI) PeerCount() // isSubscribe:false
+net.version                                =&gt; func (*ethapi.PublicNetAPI) Version() // isSubscribe:false
+
+
+debug.standardTraceBadBlockToFile          =&gt; func (*tracers.API) StandardTraceBadBlockToFile(common.Hash, *tracers.StdTraceConfig) // isSubscribe:false
+debug.standardTraceBlockToFile             =&gt; func (*tracers.API) StandardTraceBlockToFile(common.Hash, *tracers.StdTraceConfig) // isSubscribe:false
+debug.traceBadBlock                        =&gt; func (*tracers.API) TraceBadBlock(common.Hash, *tracers.TraceConfig) // isSubscribe:false
+debug.traceBlock                           =&gt; func (*tracers.API) TraceBlock([]uint8, *tracers.TraceConfig) // isSubscribe:false
+debug.traceBlockByHash                     =&gt; func (*tracers.API) TraceBlockByHash(common.Hash, *tracers.TraceConfig) // isSubscribe:false
+debug.traceBlockByNumber                   =&gt; func (*tracers.API) TraceBlockByNumber(rpc.BlockNumber, *tracers.TraceConfig) // isSubscribe:false
+debug.traceBlockFromFile                   =&gt; func (*tracers.API) TraceBlockFromFile(string, *tracers.TraceConfig) // isSubscribe:false
+debug.traceCall                            =&gt; func (*tracers.API) TraceCall(ethapi.CallArgs, rpc.BlockNumberOrHash, *tracers.TraceConfig) // isSubscribe:false
+debug.traceChain                           =&gt; func (*tracers.API) TraceChain(rpc.BlockNumber, rpc.BlockNumber, *tracers.TraceConfig) // isSubscribe:true
+debug.traceTransaction                     =&gt; func (*tracers.API) TraceTransaction(common.Hash, *tracers.TraceConfig) // isSubscribe:false
+</code></pre>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="交易池"><a class="header" href="#交易池">交易池</a></h1>
+<p><img src="./imgs/TxPool.png" alt="主要流程图" /></p>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="交易池-1"><a class="header" href="#交易池-1">交易池</a></h1>
+<p><img src="./imgs/TxPool.png" alt="主要流程图" /></p>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="交易执行"><a class="header" href="#交易执行">交易执行</a></h1>
+<h2 id="转账-1"><a class="header" href="#转账-1">转账</a></h2>
+<p>由于以太坊采用了账户余额模型，所以账户之间转账非常简单：</p>
+<ul>
+<li>发送方账户余额 减少</li>
+<li>接收方余额 增加</li>
+</ul>
+<p><img src="./imgs/transfer.png" alt="主要流程图" /></p>
+<h2 id="创建合约"><a class="header" href="#创建合约">创建合约</a></h2>
+<p>如果发送的交易接收地址为 <code>0</code>，那么意味着创建一份合约，其中 <code>data</code> 字段为合约字节码：</p>
+<pre><code class="language-js"> eth.sendTransaction({from:&quot;46e7328724a7...&quot;, data:&quot;0x608060...&quot;})
+</code></pre>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="挖矿"><a class="header" href="#挖矿">挖矿</a></h1>
+<p><img src="./imgs/miner_loop.png" alt="主要流程图" /></p>
+<h2 id="启动挖矿-1"><a class="header" href="#启动挖矿-1">启动挖矿</a></h2>
+<p>在启动 <code>geth</code> 程序的时候，可以配置挖矿相关的参数：</p>
+<pre><code>
+MINER OPTIONS:
+  --mine                              Enable mining
+  --miner.threads value               Number of CPU threads to use for mining (default: 0)
+  --miner.notify value                Comma separated HTTP URL list to notify of new work packages
+  --miner.notify.full                 Notify with pending block headers instead of work packages
+  --miner.gasprice value              Minimum gas price for mining a transaction (default: 1000000000)
+  --miner.gastarget value             Target gas floor for mined blocks (default: 8000000)
+  --miner.gaslimit value              Target gas ceiling for mined blocks (default: 8000000)
+  --miner.etherbase value             Public address for block mining rewards (default = first account) (default: &quot;0&quot;)
+  --miner.extradata value             Block extra data set by the miner (default = client version)
+  --miner.recommit value              Time interval to recreate the block being mined (default: 3s)
+  --miner.noverify                    Disable remote sealing verification
+
+</code></pre>
+<p>如果没有显式启用挖矿，即不设置参数 <code>--mine</code>，那么节点不会开始挖矿</p>
+<p>可以在节点启动后，手动在控制台启动挖矿：</p>
+<pre><code>&gt; miner.start(1)
+</code></pre>
+<h2 id="信号调度"><a class="header" href="#信号调度">信号调度</a></h2>
+<p>Worker 启动四个循环，通过监听各个通道的信号变化来调度挖矿过程</p>
+<ul>
+<li>
+<p>newWorkLoop：</p>
+<ul>
+<li>startCh:监听 <code>miner.worker.start()</code></li>
+<li>chainHeadCh：监听新出块事件<code>ChainHeadEvent</code></li>
+<li>timer.C：监听定时触发事件</li>
+<li>当以上任意信号发生时，调用 <code>commit()</code> 方法，提交 <code>newWorkReq{}</code> 请求</li>
+</ul>
+</li>
+<li>
+<p>mainLoop:</p>
+<ul>
+<li>
+<p>newWorkCh：监听 <code>newWorkReq{}</code> 信号：</p>
+<ul>
+<li>调用 <code>worker.commitNewWork()</code>：
+<ul>
+<li>计算难度</li>
+<li>提交叔块</li>
+<li>执行交易</li>
+<li>创建计算任务</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>chainSideCh：监听叔块事件</p>
+</li>
+<li>
+<p>txsCh：监听新交易事件</p>
+</li>
+</ul>
+</li>
+<li>
+<p>taskLoop：</p>
+<ul>
+<li>taskCh：监听任务信号：
+<ul>
+<li>中断进行中的计算</li>
+<li>重新开始计算</li>
+<li>返回计算结果</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>resultLoop：</p>
+<ul>
+<li>resultCh：监听结果信号：
+<ul>
+<li>广播出块事件 <code>NewMinedBlockEvent</code></li>
+<li>写入区块链：
+<ul>
+<li>触发 <code>ChainHeadEvent</code> 事件：
+<ul>
+<li>由于 <code>newWorkLoop</code> 在监听<code>ChainHeadEvent</code>，所以会开始下一轮挖矿</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="操作码列表"><a class="header" href="#操作码列表">操作码列表</a></h1>
+<pre><code class="language-go">
+// core/vm/opcodes.go
+
+var stringToOp = map[string]OpCode{
+	&quot;STOP&quot;:           STOP,
+	&quot;ADD&quot;:            ADD,
+	&quot;MUL&quot;:            MUL,
+	&quot;SUB&quot;:            SUB,
+	&quot;DIV&quot;:            DIV,
+	&quot;SDIV&quot;:           SDIV,
+	&quot;MOD&quot;:            MOD,
+	&quot;SMOD&quot;:           SMOD,
+	&quot;EXP&quot;:            EXP,
+	&quot;NOT&quot;:            NOT,
+	&quot;LT&quot;:             LT,
+	&quot;GT&quot;:             GT,
+	&quot;SLT&quot;:            SLT,
+	&quot;SGT&quot;:            SGT,
+	&quot;EQ&quot;:             EQ,
+	&quot;ISZERO&quot;:         ISZERO,
+	&quot;SIGNEXTEND&quot;:     SIGNEXTEND,
+	&quot;AND&quot;:            AND,
+	&quot;OR&quot;:             OR,
+	&quot;XOR&quot;:            XOR,
+	&quot;BYTE&quot;:           BYTE,
+	&quot;SHL&quot;:            SHL,
+	&quot;SHR&quot;:            SHR,
+	&quot;SAR&quot;:            SAR,
+	&quot;ADDMOD&quot;:         ADDMOD,
+	&quot;MULMOD&quot;:         MULMOD,
+	&quot;SHA3&quot;:           SHA3,
+	&quot;ADDRESS&quot;:        ADDRESS,
+	&quot;BALANCE&quot;:        BALANCE,
+	&quot;ORIGIN&quot;:         ORIGIN,
+	&quot;CALLER&quot;:         CALLER,
+	&quot;CALLVALUE&quot;:      CALLVALUE,
+	&quot;CALLDATALOAD&quot;:   CALLDATALOAD,
+	&quot;CALLDATASIZE&quot;:   CALLDATASIZE,
+	&quot;CALLDATACOPY&quot;:   CALLDATACOPY,
+	&quot;CHAINID&quot;:        CHAINID,
+	&quot;DELEGATECALL&quot;:   DELEGATECALL,
+	&quot;STATICCALL&quot;:     STATICCALL,
+	&quot;CODESIZE&quot;:       CODESIZE,
+	&quot;CODECOPY&quot;:       CODECOPY,
+	&quot;GASPRICE&quot;:       GASPRICE,
+	&quot;EXTCODESIZE&quot;:    EXTCODESIZE,
+	&quot;EXTCODECOPY&quot;:    EXTCODECOPY,
+	&quot;RETURNDATASIZE&quot;: RETURNDATASIZE,
+	&quot;RETURNDATACOPY&quot;: RETURNDATACOPY,
+	&quot;EXTCODEHASH&quot;:    EXTCODEHASH,
+	&quot;BLOCKHASH&quot;:      BLOCKHASH,
+	&quot;COINBASE&quot;:       COINBASE,
+	&quot;TIMESTAMP&quot;:      TIMESTAMP,
+	&quot;NUMBER&quot;:         NUMBER,
+	&quot;DIFFICULTY&quot;:     DIFFICULTY,
+	&quot;GASLIMIT&quot;:       GASLIMIT,
+	&quot;SELFBALANCE&quot;:    SELFBALANCE,
+	&quot;POP&quot;:            POP,
+	&quot;MLOAD&quot;:          MLOAD,
+	&quot;MSTORE&quot;:         MSTORE,
+	&quot;MSTORE8&quot;:        MSTORE8,
+	&quot;SLOAD&quot;:          SLOAD,
+	&quot;SSTORE&quot;:         SSTORE,
+	&quot;JUMP&quot;:           JUMP,
+	&quot;JUMPI&quot;:          JUMPI,
+	&quot;PC&quot;:             PC,
+	&quot;MSIZE&quot;:          MSIZE,
+	&quot;GAS&quot;:            GAS,
+	&quot;JUMPDEST&quot;:       JUMPDEST,
+	&quot;PUSH1&quot;:          PUSH1,
+	&quot;PUSH2&quot;:          PUSH2,
+	&quot;PUSH3&quot;:          PUSH3,
+	&quot;PUSH4&quot;:          PUSH4,
+	&quot;PUSH5&quot;:          PUSH5,
+	&quot;PUSH6&quot;:          PUSH6,
+	&quot;PUSH7&quot;:          PUSH7,
+	&quot;PUSH8&quot;:          PUSH8,
+	&quot;PUSH9&quot;:          PUSH9,
+	&quot;PUSH10&quot;:         PUSH10,
+	&quot;PUSH11&quot;:         PUSH11,
+	&quot;PUSH12&quot;:         PUSH12,
+	&quot;PUSH13&quot;:         PUSH13,
+	&quot;PUSH14&quot;:         PUSH14,
+	&quot;PUSH15&quot;:         PUSH15,
+	&quot;PUSH16&quot;:         PUSH16,
+	&quot;PUSH17&quot;:         PUSH17,
+	&quot;PUSH18&quot;:         PUSH18,
+	&quot;PUSH19&quot;:         PUSH19,
+	&quot;PUSH20&quot;:         PUSH20,
+	&quot;PUSH21&quot;:         PUSH21,
+	&quot;PUSH22&quot;:         PUSH22,
+	&quot;PUSH23&quot;:         PUSH23,
+	&quot;PUSH24&quot;:         PUSH24,
+	&quot;PUSH25&quot;:         PUSH25,
+	&quot;PUSH26&quot;:         PUSH26,
+	&quot;PUSH27&quot;:         PUSH27,
+	&quot;PUSH28&quot;:         PUSH28,
+	&quot;PUSH29&quot;:         PUSH29,
+	&quot;PUSH30&quot;:         PUSH30,
+	&quot;PUSH31&quot;:         PUSH31,
+	&quot;PUSH32&quot;:         PUSH32,
+	&quot;DUP1&quot;:           DUP1,
+	&quot;DUP2&quot;:           DUP2,
+	&quot;DUP3&quot;:           DUP3,
+	&quot;DUP4&quot;:           DUP4,
+	&quot;DUP5&quot;:           DUP5,
+	&quot;DUP6&quot;:           DUP6,
+	&quot;DUP7&quot;:           DUP7,
+	&quot;DUP8&quot;:           DUP8,
+	&quot;DUP9&quot;:           DUP9,
+	&quot;DUP10&quot;:          DUP10,
+	&quot;DUP11&quot;:          DUP11,
+	&quot;DUP12&quot;:          DUP12,
+	&quot;DUP13&quot;:          DUP13,
+	&quot;DUP14&quot;:          DUP14,
+	&quot;DUP15&quot;:          DUP15,
+	&quot;DUP16&quot;:          DUP16,
+	&quot;SWAP1&quot;:          SWAP1,
+	&quot;SWAP2&quot;:          SWAP2,
+	&quot;SWAP3&quot;:          SWAP3,
+	&quot;SWAP4&quot;:          SWAP4,
+	&quot;SWAP5&quot;:          SWAP5,
+	&quot;SWAP6&quot;:          SWAP6,
+	&quot;SWAP7&quot;:          SWAP7,
+	&quot;SWAP8&quot;:          SWAP8,
+	&quot;SWAP9&quot;:          SWAP9,
+	&quot;SWAP10&quot;:         SWAP10,
+	&quot;SWAP11&quot;:         SWAP11,
+	&quot;SWAP12&quot;:         SWAP12,
+	&quot;SWAP13&quot;:         SWAP13,
+	&quot;SWAP14&quot;:         SWAP14,
+	&quot;SWAP15&quot;:         SWAP15,
+	&quot;SWAP16&quot;:         SWAP16,
+	&quot;LOG0&quot;:           LOG0,
+	&quot;LOG1&quot;:           LOG1,
+	&quot;LOG2&quot;:           LOG2,
+	&quot;LOG3&quot;:           LOG3,
+	&quot;LOG4&quot;:           LOG4,
+	&quot;CREATE&quot;:         CREATE,
+	&quot;CREATE2&quot;:        CREATE2,
+	&quot;CALL&quot;:           CALL,
+	&quot;RETURN&quot;:         RETURN,
+	&quot;CALLCODE&quot;:       CALLCODE,
+	&quot;REVERT&quot;:         REVERT,
+	&quot;SELFDESTRUCT&quot;:   SELFDESTRUCT,
+}
+
+</code></pre>
+<h1 id="操作码执行逻辑"><a class="header" href="#操作码执行逻辑">操作码执行逻辑</a></h1>
+<pre><code class="language-go">// core/vm/instructions.go
+
+// 将栈顶两个元素相加，并将结果存回栈顶
+func opAdd(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Add(&amp;x, y)
+	return nil, nil
+}
+
+func opSub(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Sub(&amp;x, y)
+	return nil, nil
+}
+
+func opMul(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Mul(&amp;x, y)
+	return nil, nil
+}
+
+func opDiv(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Div(&amp;x, y)
+	return nil, nil
+}
+
+func opSdiv(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.SDiv(&amp;x, y)
+	return nil, nil
+}
+
+func opMod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Mod(&amp;x, y)
+	return nil, nil
+}
+
+func opSmod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.SMod(&amp;x, y)
+	return nil, nil
+}
+
+func opExp(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	base, exponent := scope.Stack.pop(), scope.Stack.peek()
+	exponent.Exp(&amp;base, exponent)
+	return nil, nil
+}
+
+func opSignExtend(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	back, num := scope.Stack.pop(), scope.Stack.peek()
+	num.ExtendSign(num, &amp;back)
+	return nil, nil
+}
+
+func opNot(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x := scope.Stack.peek()
+	x.Not(x)
+	return nil, nil
+}
+
+func opLt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Lt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opGt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Gt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opSlt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Slt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opSgt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Sgt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opEq(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Eq(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opIszero(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x := scope.Stack.peek()
+	if x.IsZero() {
+		x.SetOne()
+	} else {
+		x.Clear()
+	}
+	return nil, nil
+}
+
+func opAnd(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.And(&amp;x, y)
+	return nil, nil
+}
+
+func opOr(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Or(&amp;x, y)
+	return nil, nil
+}
+
+func opXor(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Xor(&amp;x, y)
+	return nil, nil
+}
+
+func opByte(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	th, val := scope.Stack.pop(), scope.Stack.peek()
+	val.Byte(&amp;th)
+	return nil, nil
+}
+
+func opAddmod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y, z := scope.Stack.pop(), scope.Stack.pop(), scope.Stack.peek()
+	if z.IsZero() {
+		z.Clear()
+	} else {
+		z.AddMod(&amp;x, &amp;y, z)
+	}
+	return nil, nil
+}
+
+func opMulmod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y, z := scope.Stack.pop(), scope.Stack.pop(), scope.Stack.peek()
+	z.MulMod(&amp;x, &amp;y, z)
+	return nil, nil
+}
+
+// opSHL implements Shift Left
+// The SHL instruction (shift left) pops 2 values from the stack, first arg1 and then arg2,
+// and pushes on the stack arg2 shifted to the left by arg1 number of bits.
+func opSHL(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Note, second operand is left in the stack; accumulate result into it, and no need to push it afterwards
+	shift, value := scope.Stack.pop(), scope.Stack.peek()
+	if shift.LtUint64(256) {
+		value.Lsh(value, uint(shift.Uint64()))
+	} else {
+		value.Clear()
+	}
+	return nil, nil
+}
+
+// opSHR implements Logical Shift Right
+// The SHR instruction (logical shift right) pops 2 values from the stack, first arg1 and then arg2,
+// and pushes on the stack arg2 shifted to the right by arg1 number of bits with zero fill.
+func opSHR(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Note, second operand is left in the stack; accumulate result into it, and no need to push it afterwards
+	shift, value := scope.Stack.pop(), scope.Stack.peek()
+	if shift.LtUint64(256) {
+		value.Rsh(value, uint(shift.Uint64()))
+	} else {
+		value.Clear()
+	}
+	return nil, nil
+}
+
+// opSAR implements Arithmetic Shift Right
+// The SAR instruction (arithmetic shift right) pops 2 values from the stack, first arg1 and then arg2,
+// and pushes on the stack arg2 shifted to the right by arg1 number of bits with sign extension.
+func opSAR(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	shift, value := scope.Stack.pop(), scope.Stack.peek()
+	if shift.GtUint64(256) {
+		if value.Sign() &gt;= 0 {
+			value.Clear()
+		} else {
+			// Max negative shift: all bits set
+			value.SetAllOne()
+		}
+		return nil, nil
+	}
+	n := uint(shift.Uint64())
+	value.SRsh(value, n)
+	return nil, nil
+}
+
+func opSha3(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	offset, size := scope.Stack.pop(), scope.Stack.peek()
+	data := scope.Memory.GetPtr(int64(offset.Uint64()), int64(size.Uint64()))
+
+	if interpreter.hasher == nil {
+		interpreter.hasher = sha3.NewLegacyKeccak256().(keccakState)
+	} else {
+		interpreter.hasher.Reset()
+	}
+	interpreter.hasher.Write(data)
+	interpreter.hasher.Read(interpreter.hasherBuf[:])
+
+	evm := interpreter.evm
+	if evm.vmConfig.EnablePreimageRecording {
+		evm.StateDB.AddPreimage(interpreter.hasherBuf, data)
+	}
+
+	size.SetBytes(interpreter.hasherBuf[:])
+	return nil, nil
+}
+func opAddress(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(scope.Contract.Address().Bytes()))
+	return nil, nil
+}
+
+func opBalance(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	slot := scope.Stack.peek()
+	address := common.Address(slot.Bytes20())
+	slot.SetFromBig(interpreter.evm.StateDB.GetBalance(address))
+	return nil, nil
+}
+
+func opOrigin(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(interpreter.evm.Origin.Bytes()))
+	return nil, nil
+}
+func opCaller(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(scope.Contract.Caller().Bytes()))
+	return nil, nil
+}
+
+func opCallValue(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(scope.Contract.value)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opCallDataLoad(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x := scope.Stack.peek()
+	if offset, overflow := x.Uint64WithOverflow(); !overflow {
+		data := getData(scope.Contract.Input, offset, 32)
+		x.SetBytes(data)
+	} else {
+		x.Clear()
+	}
+	return nil, nil
+}
+
+func opCallDataSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(uint64(len(scope.Contract.Input))))
+	return nil, nil
+}
+
+func opCallDataCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		memOffset  = scope.Stack.pop()
+		dataOffset = scope.Stack.pop()
+		length     = scope.Stack.pop()
+	)
+	dataOffset64, overflow := dataOffset.Uint64WithOverflow()
+	if overflow {
+		dataOffset64 = 0xffffffffffffffff
+	}
+	// These values are checked for overflow during gas cost calculation
+	memOffset64 := memOffset.Uint64()
+	length64 := length.Uint64()
+	scope.Memory.Set(memOffset64, length64, getData(scope.Contract.Input, dataOffset64, length64))
+
+	return nil, nil
+}
+
+func opReturnDataSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(uint64(len(interpreter.returnData))))
+	return nil, nil
+}
+
+func opReturnDataCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		memOffset  = scope.Stack.pop()
+		dataOffset = scope.Stack.pop()
+		length     = scope.Stack.pop()
+	)
+
+	offset64, overflow := dataOffset.Uint64WithOverflow()
+	if overflow {
+		return nil, ErrReturnDataOutOfBounds
+	}
+	// we can reuse dataOffset now (aliasing it for clarity)
+	var end = dataOffset
+	end.Add(&amp;dataOffset, &amp;length)
+	end64, overflow := end.Uint64WithOverflow()
+	if overflow || uint64(len(interpreter.returnData)) &lt; end64 {
+		return nil, ErrReturnDataOutOfBounds
+	}
+	scope.Memory.Set(memOffset.Uint64(), length.Uint64(), interpreter.returnData[offset64:end64])
+	return nil, nil
+}
+
+func opExtCodeSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	slot := scope.Stack.peek()
+	slot.SetUint64(uint64(interpreter.evm.StateDB.GetCodeSize(slot.Bytes20())))
+	return nil, nil
+}
+
+func opCodeSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	l := new(uint256.Int)
+	l.SetUint64(uint64(len(scope.Contract.Code)))
+	scope.Stack.push(l)
+	return nil, nil
+}
+
+func opCodeCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		memOffset  = scope.Stack.pop()
+		codeOffset = scope.Stack.pop()
+		length     = scope.Stack.pop()
+	)
+	uint64CodeOffset, overflow := codeOffset.Uint64WithOverflow()
+	if overflow {
+		uint64CodeOffset = 0xffffffffffffffff
+	}
+	codeCopy := getData(scope.Contract.Code, uint64CodeOffset, length.Uint64())
+	scope.Memory.Set(memOffset.Uint64(), length.Uint64(), codeCopy)
+
+	return nil, nil
+}
+
+func opExtCodeCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		stack      = scope.Stack
+		a          = stack.pop()
+		memOffset  = stack.pop()
+		codeOffset = stack.pop()
+		length     = stack.pop()
+	)
+	uint64CodeOffset, overflow := codeOffset.Uint64WithOverflow()
+	if overflow {
+		uint64CodeOffset = 0xffffffffffffffff
+	}
+	addr := common.Address(a.Bytes20())
+	codeCopy := getData(interpreter.evm.StateDB.GetCode(addr), uint64CodeOffset, length.Uint64())
+	scope.Memory.Set(memOffset.Uint64(), length.Uint64(), codeCopy)
+
+	return nil, nil
+}
+
+// opExtCodeHash returns the code hash of a specified account.
+// There are several cases when the function is called, while we can relay everything
+// to `state.GetCodeHash` function to ensure the correctness.
+//   (1) Caller tries to get the code hash of a normal contract account, state
+// should return the relative code hash and set it as the result.
+//
+//   (2) Caller tries to get the code hash of a non-existent account, state should
+// return common.Hash{} and zero will be set as the result.
+//
+//   (3) Caller tries to get the code hash for an account without contract code,
+// state should return emptyCodeHash(0xc5d246...) as the result.
+//
+//   (4) Caller tries to get the code hash of a precompiled account, the result
+// should be zero or emptyCodeHash.
+//
+// It is worth noting that in order to avoid unnecessary create and clean,
+// all precompile accounts on mainnet have been transferred 1 wei, so the return
+// here should be emptyCodeHash.
+// If the precompile account is not transferred any amount on a private or
+// customized chain, the return value will be zero.
+//
+//   (5) Caller tries to get the code hash for an account which is marked as suicided
+// in the current transaction, the code hash of this account should be returned.
+//
+//   (6) Caller tries to get the code hash for an account which is marked as deleted,
+// this account should be regarded as a non-existent account and zero should be returned.
+func opExtCodeHash(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	slot := scope.Stack.peek()
+	address := common.Address(slot.Bytes20())
+	if interpreter.evm.StateDB.Empty(address) {
+		slot.Clear()
+	} else {
+		slot.SetBytes(interpreter.evm.StateDB.GetCodeHash(address).Bytes())
+	}
+	return nil, nil
+}
+
+func opGasprice(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.GasPrice)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opBlockhash(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	num := scope.Stack.peek()
+	num64, overflow := num.Uint64WithOverflow()
+	if overflow {
+		num.Clear()
+		return nil, nil
+	}
+	var upper, lower uint64
+	upper = interpreter.evm.Context.BlockNumber.Uint64()
+	if upper &lt; 257 {
+		lower = 0
+	} else {
+		lower = upper - 256
+	}
+	if num64 &gt;= lower &amp;&amp; num64 &lt; upper {
+		num.SetBytes(interpreter.evm.Context.GetHash(num64).Bytes())
+	} else {
+		num.Clear()
+	}
+	return nil, nil
+}
+
+func opCoinbase(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(interpreter.evm.Context.Coinbase.Bytes()))
+	return nil, nil
+}
+
+func opTimestamp(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.Context.Time)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opNumber(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.Context.BlockNumber)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opDifficulty(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.Context.Difficulty)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opGasLimit(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(interpreter.evm.Context.GasLimit))
+	return nil, nil
+}
+
+func opPop(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.pop()
+	return nil, nil
+}
+
+func opMload(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v := scope.Stack.peek()
+	offset := int64(v.Uint64())
+	v.SetBytes(scope.Memory.GetPtr(offset, 32))
+	return nil, nil
+}
+
+func opMstore(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// pop value of the stack
+	mStart, val := scope.Stack.pop(), scope.Stack.pop()
+	scope.Memory.Set32(mStart.Uint64(), &amp;val)
+	return nil, nil
+}
+
+func opMstore8(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	off, val := scope.Stack.pop(), scope.Stack.pop()
+	scope.Memory.store[off.Uint64()] = byte(val.Uint64())
+	return nil, nil
+}
+
+func opSload(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	loc := scope.Stack.peek()
+	hash := common.Hash(loc.Bytes32())
+	val := interpreter.evm.StateDB.GetState(scope.Contract.Address(), hash)
+	loc.SetBytes(val.Bytes())
+	return nil, nil
+}
+
+func opSstore(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	loc := scope.Stack.pop()
+	val := scope.Stack.pop()
+	interpreter.evm.StateDB.SetState(scope.Contract.Address(),
+		loc.Bytes32(), val.Bytes32())
+	return nil, nil
+}
+
+func opJump(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	pos := scope.Stack.pop()
+	if !scope.Contract.validJumpdest(&amp;pos) {
+		return nil, ErrInvalidJump
+	}
+	*pc = pos.Uint64()
+	return nil, nil
+}
+
+func opJumpi(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	pos, cond := scope.Stack.pop(), scope.Stack.pop()
+	if !cond.IsZero() {
+		if !scope.Contract.validJumpdest(&amp;pos) {
+			return nil, ErrInvalidJump
+		}
+		*pc = pos.Uint64()
+	} else {
+		*pc++
+	}
+	return nil, nil
+}
+
+func opJumpdest(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	return nil, nil
+}
+
+func opPc(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(*pc))
+	return nil, nil
+}
+
+func opMsize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(uint64(scope.Memory.Len())))
+	return nil, nil
+}
+
+func opGas(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(scope.Contract.Gas))
+	return nil, nil
+}
+
+func opCreate(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		value        = scope.Stack.pop()
+		offset, size = scope.Stack.pop(), scope.Stack.pop()
+		input        = scope.Memory.GetCopy(int64(offset.Uint64()), int64(size.Uint64()))
+		gas          = scope.Contract.Gas
+	)
+	if interpreter.evm.chainRules.IsEIP150 {
+		gas -= gas / 64
+	}
+	// reuse size int for stackvalue
+	stackvalue := size
+
+	scope.Contract.UseGas(gas)
+	//TODO: use uint256.Int instead of converting with toBig()
+	var bigVal = big0
+	if !value.IsZero() {
+		bigVal = value.ToBig()
+	}
+
+	res, addr, returnGas, suberr := interpreter.evm.Create(scope.Contract, input, gas, bigVal)
+	// Push item on the stack based on the returned error. If the ruleset is
+	// homestead we must check for CodeStoreOutOfGasError (homestead only
+	// rule) and treat as an error, if the ruleset is frontier we must
+	// ignore this error and pretend the operation was successful.
+	if interpreter.evm.chainRules.IsHomestead &amp;&amp; suberr == ErrCodeStoreOutOfGas {
+		stackvalue.Clear()
+	} else if suberr != nil &amp;&amp; suberr != ErrCodeStoreOutOfGas {
+		stackvalue.Clear()
+	} else {
+		stackvalue.SetBytes(addr.Bytes())
+	}
+	scope.Stack.push(&amp;stackvalue)
+	scope.Contract.Gas += returnGas
+
+	if suberr == ErrExecutionReverted {
+		return res, nil
+	}
+	return nil, nil
+}
+
+func opCreate2(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		endowment    = scope.Stack.pop()
+		offset, size = scope.Stack.pop(), scope.Stack.pop()
+		salt         = scope.Stack.pop()
+		input        = scope.Memory.GetCopy(int64(offset.Uint64()), int64(size.Uint64()))
+		gas          = scope.Contract.Gas
+	)
+
+	// Apply EIP150
+	gas -= gas / 64
+	scope.Contract.UseGas(gas)
+	// reuse size int for stackvalue
+	stackvalue := size
+	//TODO: use uint256.Int instead of converting with toBig()
+	bigEndowment := big0
+	if !endowment.IsZero() {
+		bigEndowment = endowment.ToBig()
+	}
+	res, addr, returnGas, suberr := interpreter.evm.Create2(scope.Contract, input, gas,
+		bigEndowment, &amp;salt)
+	// Push item on the stack based on the returned error.
+	if suberr != nil {
+		stackvalue.Clear()
+	} else {
+		stackvalue.SetBytes(addr.Bytes())
+	}
+	scope.Stack.push(&amp;stackvalue)
+	scope.Contract.Gas += returnGas
+
+	if suberr == ErrExecutionReverted {
+		return res, nil
+	}
+	return nil, nil
+}
+
+func opCall(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	stack := scope.Stack
+	// Pop gas. The actual gas in interpreter.evm.callGasTemp.
+	// We can use this as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, value, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get the arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	var bigVal = big0
+	//TODO: use uint256.Int instead of converting with toBig()
+	// By using big0 here, we save an alloc for the most common case (non-ether-transferring contract calls),
+	// but it would make more sense to extend the usage of uint256.Int
+	if !value.IsZero() {
+		gas += params.CallStipend
+		bigVal = value.ToBig()
+	}
+
+	ret, returnGas, err := interpreter.evm.Call(scope.Contract, toAddr, args, gas, bigVal)
+
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opCallCode(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Pop gas. The actual gas is in interpreter.evm.callGasTemp.
+	stack := scope.Stack
+	// We use it as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, value, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	//TODO: use uint256.Int instead of converting with toBig()
+	var bigVal = big0
+	if !value.IsZero() {
+		gas += params.CallStipend
+		bigVal = value.ToBig()
+	}
+
+	ret, returnGas, err := interpreter.evm.CallCode(scope.Contract, toAddr, args, gas, bigVal)
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opDelegateCall(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	stack := scope.Stack
+	// Pop gas. The actual gas is in interpreter.evm.callGasTemp.
+	// We use it as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	ret, returnGas, err := interpreter.evm.DelegateCall(scope.Contract, toAddr, args, gas)
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opStaticCall(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Pop gas. The actual gas is in interpreter.evm.callGasTemp.
+	stack := scope.Stack
+	// We use it as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	ret, returnGas, err := interpreter.evm.StaticCall(scope.Contract, toAddr, args, gas)
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opReturn(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	offset, size := scope.Stack.pop(), scope.Stack.pop()
+	ret := scope.Memory.GetPtr(int64(offset.Uint64()), int64(size.Uint64()))
+
+	return ret, nil
+}
+
+func opRevert(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	offset, size := scope.Stack.pop(), scope.Stack.pop()
+	ret := scope.Memory.GetPtr(int64(offset.Uint64()), int64(size.Uint64()))
+
+	return ret, nil
+}
+
+func opStop(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	return nil, nil
+}
+
+func opSuicide(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	beneficiary := scope.Stack.pop()
+	balance := interpreter.evm.StateDB.GetBalance(scope.Contract.Address())
+	interpreter.evm.StateDB.AddBalance(beneficiary.Bytes20(), balance)
+	interpreter.evm.StateDB.Suicide(scope.Contract.Address())
+	return nil, nil
+}
+
+// following functions are used by the instruction jump  table
+
+// make log instruction function
+func makeLog(size int) executionFunc {
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		topics := make([]common.Hash, size)
+		stack := scope.Stack
+		mStart, mSize := stack.pop(), stack.pop()
+		for i := 0; i &lt; size; i++ {
+			addr := stack.pop()
+			topics[i] = addr.Bytes32()
+		}
+
+		d := scope.Memory.GetCopy(int64(mStart.Uint64()), int64(mSize.Uint64()))
+		interpreter.evm.StateDB.AddLog(&amp;types.Log{
+			Address: scope.Contract.Address(),
+			Topics:  topics,
+			Data:    d,
+			// This is a non-consensus field, but assigned here because
+			// core/state doesn't know the current block number.
+			BlockNumber: interpreter.evm.Context.BlockNumber.Uint64(),
+		})
+
+		return nil, nil
+	}
+}
+
+// opPush1 is a specialized version of pushN
+func opPush1(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		codeLen = uint64(len(scope.Contract.Code))
+		integer = new(uint256.Int)
+	)
+	*pc += 1
+	if *pc &lt; codeLen {
+		scope.Stack.push(integer.SetUint64(uint64(scope.Contract.Code[*pc])))
+	} else {
+		scope.Stack.push(integer.Clear())
+	}
+	return nil, nil
+}
+
+// make push instruction function
+func makePush(size uint64, pushByteSize int) executionFunc {
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		codeLen := len(scope.Contract.Code)
+
+		startMin := codeLen
+		if int(*pc+1) &lt; startMin {
+			startMin = int(*pc + 1)
+		}
+
+		endMin := codeLen
+		if startMin+pushByteSize &lt; endMin {
+			endMin = startMin + pushByteSize
+		}
+
+		integer := new(uint256.Int)
+		scope.Stack.push(integer.SetBytes(common.RightPadBytes(
+			scope.Contract.Code[startMin:endMin], pushByteSize)))
+
+		*pc += size
+		return nil, nil
+	}
+}
+
+// make dup instruction function
+func makeDup(size int64) executionFunc {
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		scope.Stack.dup(int(size))
+		return nil, nil
+	}
+}
+
+// make swap instruction function
+func makeSwap(size int64) executionFunc {
+	// switch n + 1 otherwise n would be swapped with n
+	size++
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		scope.Stack.swap(int(size))
+		return nil, nil
+	}
+}
+
+</code></pre>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="操作码列表-1"><a class="header" href="#操作码列表-1">操作码列表</a></h1>
+<pre><code class="language-go">
+// core/vm/opcodes.go
+
+var stringToOp = map[string]OpCode{
+	&quot;STOP&quot;:           STOP,
+	&quot;ADD&quot;:            ADD,
+	&quot;MUL&quot;:            MUL,
+	&quot;SUB&quot;:            SUB,
+	&quot;DIV&quot;:            DIV,
+	&quot;SDIV&quot;:           SDIV,
+	&quot;MOD&quot;:            MOD,
+	&quot;SMOD&quot;:           SMOD,
+	&quot;EXP&quot;:            EXP,
+	&quot;NOT&quot;:            NOT,
+	&quot;LT&quot;:             LT,
+	&quot;GT&quot;:             GT,
+	&quot;SLT&quot;:            SLT,
+	&quot;SGT&quot;:            SGT,
+	&quot;EQ&quot;:             EQ,
+	&quot;ISZERO&quot;:         ISZERO,
+	&quot;SIGNEXTEND&quot;:     SIGNEXTEND,
+	&quot;AND&quot;:            AND,
+	&quot;OR&quot;:             OR,
+	&quot;XOR&quot;:            XOR,
+	&quot;BYTE&quot;:           BYTE,
+	&quot;SHL&quot;:            SHL,
+	&quot;SHR&quot;:            SHR,
+	&quot;SAR&quot;:            SAR,
+	&quot;ADDMOD&quot;:         ADDMOD,
+	&quot;MULMOD&quot;:         MULMOD,
+	&quot;SHA3&quot;:           SHA3,
+	&quot;ADDRESS&quot;:        ADDRESS,
+	&quot;BALANCE&quot;:        BALANCE,
+	&quot;ORIGIN&quot;:         ORIGIN,
+	&quot;CALLER&quot;:         CALLER,
+	&quot;CALLVALUE&quot;:      CALLVALUE,
+	&quot;CALLDATALOAD&quot;:   CALLDATALOAD,
+	&quot;CALLDATASIZE&quot;:   CALLDATASIZE,
+	&quot;CALLDATACOPY&quot;:   CALLDATACOPY,
+	&quot;CHAINID&quot;:        CHAINID,
+	&quot;DELEGATECALL&quot;:   DELEGATECALL,
+	&quot;STATICCALL&quot;:     STATICCALL,
+	&quot;CODESIZE&quot;:       CODESIZE,
+	&quot;CODECOPY&quot;:       CODECOPY,
+	&quot;GASPRICE&quot;:       GASPRICE,
+	&quot;EXTCODESIZE&quot;:    EXTCODESIZE,
+	&quot;EXTCODECOPY&quot;:    EXTCODECOPY,
+	&quot;RETURNDATASIZE&quot;: RETURNDATASIZE,
+	&quot;RETURNDATACOPY&quot;: RETURNDATACOPY,
+	&quot;EXTCODEHASH&quot;:    EXTCODEHASH,
+	&quot;BLOCKHASH&quot;:      BLOCKHASH,
+	&quot;COINBASE&quot;:       COINBASE,
+	&quot;TIMESTAMP&quot;:      TIMESTAMP,
+	&quot;NUMBER&quot;:         NUMBER,
+	&quot;DIFFICULTY&quot;:     DIFFICULTY,
+	&quot;GASLIMIT&quot;:       GASLIMIT,
+	&quot;SELFBALANCE&quot;:    SELFBALANCE,
+	&quot;POP&quot;:            POP,
+	&quot;MLOAD&quot;:          MLOAD,
+	&quot;MSTORE&quot;:         MSTORE,
+	&quot;MSTORE8&quot;:        MSTORE8,
+	&quot;SLOAD&quot;:          SLOAD,
+	&quot;SSTORE&quot;:         SSTORE,
+	&quot;JUMP&quot;:           JUMP,
+	&quot;JUMPI&quot;:          JUMPI,
+	&quot;PC&quot;:             PC,
+	&quot;MSIZE&quot;:          MSIZE,
+	&quot;GAS&quot;:            GAS,
+	&quot;JUMPDEST&quot;:       JUMPDEST,
+	&quot;PUSH1&quot;:          PUSH1,
+	&quot;PUSH2&quot;:          PUSH2,
+	&quot;PUSH3&quot;:          PUSH3,
+	&quot;PUSH4&quot;:          PUSH4,
+	&quot;PUSH5&quot;:          PUSH5,
+	&quot;PUSH6&quot;:          PUSH6,
+	&quot;PUSH7&quot;:          PUSH7,
+	&quot;PUSH8&quot;:          PUSH8,
+	&quot;PUSH9&quot;:          PUSH9,
+	&quot;PUSH10&quot;:         PUSH10,
+	&quot;PUSH11&quot;:         PUSH11,
+	&quot;PUSH12&quot;:         PUSH12,
+	&quot;PUSH13&quot;:         PUSH13,
+	&quot;PUSH14&quot;:         PUSH14,
+	&quot;PUSH15&quot;:         PUSH15,
+	&quot;PUSH16&quot;:         PUSH16,
+	&quot;PUSH17&quot;:         PUSH17,
+	&quot;PUSH18&quot;:         PUSH18,
+	&quot;PUSH19&quot;:         PUSH19,
+	&quot;PUSH20&quot;:         PUSH20,
+	&quot;PUSH21&quot;:         PUSH21,
+	&quot;PUSH22&quot;:         PUSH22,
+	&quot;PUSH23&quot;:         PUSH23,
+	&quot;PUSH24&quot;:         PUSH24,
+	&quot;PUSH25&quot;:         PUSH25,
+	&quot;PUSH26&quot;:         PUSH26,
+	&quot;PUSH27&quot;:         PUSH27,
+	&quot;PUSH28&quot;:         PUSH28,
+	&quot;PUSH29&quot;:         PUSH29,
+	&quot;PUSH30&quot;:         PUSH30,
+	&quot;PUSH31&quot;:         PUSH31,
+	&quot;PUSH32&quot;:         PUSH32,
+	&quot;DUP1&quot;:           DUP1,
+	&quot;DUP2&quot;:           DUP2,
+	&quot;DUP3&quot;:           DUP3,
+	&quot;DUP4&quot;:           DUP4,
+	&quot;DUP5&quot;:           DUP5,
+	&quot;DUP6&quot;:           DUP6,
+	&quot;DUP7&quot;:           DUP7,
+	&quot;DUP8&quot;:           DUP8,
+	&quot;DUP9&quot;:           DUP9,
+	&quot;DUP10&quot;:          DUP10,
+	&quot;DUP11&quot;:          DUP11,
+	&quot;DUP12&quot;:          DUP12,
+	&quot;DUP13&quot;:          DUP13,
+	&quot;DUP14&quot;:          DUP14,
+	&quot;DUP15&quot;:          DUP15,
+	&quot;DUP16&quot;:          DUP16,
+	&quot;SWAP1&quot;:          SWAP1,
+	&quot;SWAP2&quot;:          SWAP2,
+	&quot;SWAP3&quot;:          SWAP3,
+	&quot;SWAP4&quot;:          SWAP4,
+	&quot;SWAP5&quot;:          SWAP5,
+	&quot;SWAP6&quot;:          SWAP6,
+	&quot;SWAP7&quot;:          SWAP7,
+	&quot;SWAP8&quot;:          SWAP8,
+	&quot;SWAP9&quot;:          SWAP9,
+	&quot;SWAP10&quot;:         SWAP10,
+	&quot;SWAP11&quot;:         SWAP11,
+	&quot;SWAP12&quot;:         SWAP12,
+	&quot;SWAP13&quot;:         SWAP13,
+	&quot;SWAP14&quot;:         SWAP14,
+	&quot;SWAP15&quot;:         SWAP15,
+	&quot;SWAP16&quot;:         SWAP16,
+	&quot;LOG0&quot;:           LOG0,
+	&quot;LOG1&quot;:           LOG1,
+	&quot;LOG2&quot;:           LOG2,
+	&quot;LOG3&quot;:           LOG3,
+	&quot;LOG4&quot;:           LOG4,
+	&quot;CREATE&quot;:         CREATE,
+	&quot;CREATE2&quot;:        CREATE2,
+	&quot;CALL&quot;:           CALL,
+	&quot;RETURN&quot;:         RETURN,
+	&quot;CALLCODE&quot;:       CALLCODE,
+	&quot;REVERT&quot;:         REVERT,
+	&quot;SELFDESTRUCT&quot;:   SELFDESTRUCT,
+}
+
+</code></pre>
+<h1 id="操作码执行逻辑-1"><a class="header" href="#操作码执行逻辑-1">操作码执行逻辑</a></h1>
+<pre><code class="language-go">// core/vm/instructions.go
+
+// 将栈顶两个元素相加，并将结果存回栈顶
+func opAdd(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Add(&amp;x, y)
+	return nil, nil
+}
+
+func opSub(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Sub(&amp;x, y)
+	return nil, nil
+}
+
+func opMul(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Mul(&amp;x, y)
+	return nil, nil
+}
+
+func opDiv(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Div(&amp;x, y)
+	return nil, nil
+}
+
+func opSdiv(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.SDiv(&amp;x, y)
+	return nil, nil
+}
+
+func opMod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Mod(&amp;x, y)
+	return nil, nil
+}
+
+func opSmod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.SMod(&amp;x, y)
+	return nil, nil
+}
+
+func opExp(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	base, exponent := scope.Stack.pop(), scope.Stack.peek()
+	exponent.Exp(&amp;base, exponent)
+	return nil, nil
+}
+
+func opSignExtend(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	back, num := scope.Stack.pop(), scope.Stack.peek()
+	num.ExtendSign(num, &amp;back)
+	return nil, nil
+}
+
+func opNot(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x := scope.Stack.peek()
+	x.Not(x)
+	return nil, nil
+}
+
+func opLt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Lt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opGt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Gt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opSlt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Slt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opSgt(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Sgt(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opEq(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	if x.Eq(y) {
+		y.SetOne()
+	} else {
+		y.Clear()
+	}
+	return nil, nil
+}
+
+func opIszero(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x := scope.Stack.peek()
+	if x.IsZero() {
+		x.SetOne()
+	} else {
+		x.Clear()
+	}
+	return nil, nil
+}
+
+func opAnd(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.And(&amp;x, y)
+	return nil, nil
+}
+
+func opOr(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Or(&amp;x, y)
+	return nil, nil
+}
+
+func opXor(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y := scope.Stack.pop(), scope.Stack.peek()
+	y.Xor(&amp;x, y)
+	return nil, nil
+}
+
+func opByte(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	th, val := scope.Stack.pop(), scope.Stack.peek()
+	val.Byte(&amp;th)
+	return nil, nil
+}
+
+func opAddmod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y, z := scope.Stack.pop(), scope.Stack.pop(), scope.Stack.peek()
+	if z.IsZero() {
+		z.Clear()
+	} else {
+		z.AddMod(&amp;x, &amp;y, z)
+	}
+	return nil, nil
+}
+
+func opMulmod(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x, y, z := scope.Stack.pop(), scope.Stack.pop(), scope.Stack.peek()
+	z.MulMod(&amp;x, &amp;y, z)
+	return nil, nil
+}
+
+// opSHL implements Shift Left
+// The SHL instruction (shift left) pops 2 values from the stack, first arg1 and then arg2,
+// and pushes on the stack arg2 shifted to the left by arg1 number of bits.
+func opSHL(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Note, second operand is left in the stack; accumulate result into it, and no need to push it afterwards
+	shift, value := scope.Stack.pop(), scope.Stack.peek()
+	if shift.LtUint64(256) {
+		value.Lsh(value, uint(shift.Uint64()))
+	} else {
+		value.Clear()
+	}
+	return nil, nil
+}
+
+// opSHR implements Logical Shift Right
+// The SHR instruction (logical shift right) pops 2 values from the stack, first arg1 and then arg2,
+// and pushes on the stack arg2 shifted to the right by arg1 number of bits with zero fill.
+func opSHR(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Note, second operand is left in the stack; accumulate result into it, and no need to push it afterwards
+	shift, value := scope.Stack.pop(), scope.Stack.peek()
+	if shift.LtUint64(256) {
+		value.Rsh(value, uint(shift.Uint64()))
+	} else {
+		value.Clear()
+	}
+	return nil, nil
+}
+
+// opSAR implements Arithmetic Shift Right
+// The SAR instruction (arithmetic shift right) pops 2 values from the stack, first arg1 and then arg2,
+// and pushes on the stack arg2 shifted to the right by arg1 number of bits with sign extension.
+func opSAR(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	shift, value := scope.Stack.pop(), scope.Stack.peek()
+	if shift.GtUint64(256) {
+		if value.Sign() &gt;= 0 {
+			value.Clear()
+		} else {
+			// Max negative shift: all bits set
+			value.SetAllOne()
+		}
+		return nil, nil
+	}
+	n := uint(shift.Uint64())
+	value.SRsh(value, n)
+	return nil, nil
+}
+
+func opSha3(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	offset, size := scope.Stack.pop(), scope.Stack.peek()
+	data := scope.Memory.GetPtr(int64(offset.Uint64()), int64(size.Uint64()))
+
+	if interpreter.hasher == nil {
+		interpreter.hasher = sha3.NewLegacyKeccak256().(keccakState)
+	} else {
+		interpreter.hasher.Reset()
+	}
+	interpreter.hasher.Write(data)
+	interpreter.hasher.Read(interpreter.hasherBuf[:])
+
+	evm := interpreter.evm
+	if evm.vmConfig.EnablePreimageRecording {
+		evm.StateDB.AddPreimage(interpreter.hasherBuf, data)
+	}
+
+	size.SetBytes(interpreter.hasherBuf[:])
+	return nil, nil
+}
+func opAddress(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(scope.Contract.Address().Bytes()))
+	return nil, nil
+}
+
+func opBalance(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	slot := scope.Stack.peek()
+	address := common.Address(slot.Bytes20())
+	slot.SetFromBig(interpreter.evm.StateDB.GetBalance(address))
+	return nil, nil
+}
+
+func opOrigin(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(interpreter.evm.Origin.Bytes()))
+	return nil, nil
+}
+func opCaller(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(scope.Contract.Caller().Bytes()))
+	return nil, nil
+}
+
+func opCallValue(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(scope.Contract.value)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opCallDataLoad(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	x := scope.Stack.peek()
+	if offset, overflow := x.Uint64WithOverflow(); !overflow {
+		data := getData(scope.Contract.Input, offset, 32)
+		x.SetBytes(data)
+	} else {
+		x.Clear()
+	}
+	return nil, nil
+}
+
+func opCallDataSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(uint64(len(scope.Contract.Input))))
+	return nil, nil
+}
+
+func opCallDataCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		memOffset  = scope.Stack.pop()
+		dataOffset = scope.Stack.pop()
+		length     = scope.Stack.pop()
+	)
+	dataOffset64, overflow := dataOffset.Uint64WithOverflow()
+	if overflow {
+		dataOffset64 = 0xffffffffffffffff
+	}
+	// These values are checked for overflow during gas cost calculation
+	memOffset64 := memOffset.Uint64()
+	length64 := length.Uint64()
+	scope.Memory.Set(memOffset64, length64, getData(scope.Contract.Input, dataOffset64, length64))
+
+	return nil, nil
+}
+
+func opReturnDataSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(uint64(len(interpreter.returnData))))
+	return nil, nil
+}
+
+func opReturnDataCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		memOffset  = scope.Stack.pop()
+		dataOffset = scope.Stack.pop()
+		length     = scope.Stack.pop()
+	)
+
+	offset64, overflow := dataOffset.Uint64WithOverflow()
+	if overflow {
+		return nil, ErrReturnDataOutOfBounds
+	}
+	// we can reuse dataOffset now (aliasing it for clarity)
+	var end = dataOffset
+	end.Add(&amp;dataOffset, &amp;length)
+	end64, overflow := end.Uint64WithOverflow()
+	if overflow || uint64(len(interpreter.returnData)) &lt; end64 {
+		return nil, ErrReturnDataOutOfBounds
+	}
+	scope.Memory.Set(memOffset.Uint64(), length.Uint64(), interpreter.returnData[offset64:end64])
+	return nil, nil
+}
+
+func opExtCodeSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	slot := scope.Stack.peek()
+	slot.SetUint64(uint64(interpreter.evm.StateDB.GetCodeSize(slot.Bytes20())))
+	return nil, nil
+}
+
+func opCodeSize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	l := new(uint256.Int)
+	l.SetUint64(uint64(len(scope.Contract.Code)))
+	scope.Stack.push(l)
+	return nil, nil
+}
+
+func opCodeCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		memOffset  = scope.Stack.pop()
+		codeOffset = scope.Stack.pop()
+		length     = scope.Stack.pop()
+	)
+	uint64CodeOffset, overflow := codeOffset.Uint64WithOverflow()
+	if overflow {
+		uint64CodeOffset = 0xffffffffffffffff
+	}
+	codeCopy := getData(scope.Contract.Code, uint64CodeOffset, length.Uint64())
+	scope.Memory.Set(memOffset.Uint64(), length.Uint64(), codeCopy)
+
+	return nil, nil
+}
+
+func opExtCodeCopy(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		stack      = scope.Stack
+		a          = stack.pop()
+		memOffset  = stack.pop()
+		codeOffset = stack.pop()
+		length     = stack.pop()
+	)
+	uint64CodeOffset, overflow := codeOffset.Uint64WithOverflow()
+	if overflow {
+		uint64CodeOffset = 0xffffffffffffffff
+	}
+	addr := common.Address(a.Bytes20())
+	codeCopy := getData(interpreter.evm.StateDB.GetCode(addr), uint64CodeOffset, length.Uint64())
+	scope.Memory.Set(memOffset.Uint64(), length.Uint64(), codeCopy)
+
+	return nil, nil
+}
+
+// opExtCodeHash returns the code hash of a specified account.
+// There are several cases when the function is called, while we can relay everything
+// to `state.GetCodeHash` function to ensure the correctness.
+//   (1) Caller tries to get the code hash of a normal contract account, state
+// should return the relative code hash and set it as the result.
+//
+//   (2) Caller tries to get the code hash of a non-existent account, state should
+// return common.Hash{} and zero will be set as the result.
+//
+//   (3) Caller tries to get the code hash for an account without contract code,
+// state should return emptyCodeHash(0xc5d246...) as the result.
+//
+//   (4) Caller tries to get the code hash of a precompiled account, the result
+// should be zero or emptyCodeHash.
+//
+// It is worth noting that in order to avoid unnecessary create and clean,
+// all precompile accounts on mainnet have been transferred 1 wei, so the return
+// here should be emptyCodeHash.
+// If the precompile account is not transferred any amount on a private or
+// customized chain, the return value will be zero.
+//
+//   (5) Caller tries to get the code hash for an account which is marked as suicided
+// in the current transaction, the code hash of this account should be returned.
+//
+//   (6) Caller tries to get the code hash for an account which is marked as deleted,
+// this account should be regarded as a non-existent account and zero should be returned.
+func opExtCodeHash(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	slot := scope.Stack.peek()
+	address := common.Address(slot.Bytes20())
+	if interpreter.evm.StateDB.Empty(address) {
+		slot.Clear()
+	} else {
+		slot.SetBytes(interpreter.evm.StateDB.GetCodeHash(address).Bytes())
+	}
+	return nil, nil
+}
+
+func opGasprice(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.GasPrice)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opBlockhash(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	num := scope.Stack.peek()
+	num64, overflow := num.Uint64WithOverflow()
+	if overflow {
+		num.Clear()
+		return nil, nil
+	}
+	var upper, lower uint64
+	upper = interpreter.evm.Context.BlockNumber.Uint64()
+	if upper &lt; 257 {
+		lower = 0
+	} else {
+		lower = upper - 256
+	}
+	if num64 &gt;= lower &amp;&amp; num64 &lt; upper {
+		num.SetBytes(interpreter.evm.Context.GetHash(num64).Bytes())
+	} else {
+		num.Clear()
+	}
+	return nil, nil
+}
+
+func opCoinbase(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetBytes(interpreter.evm.Context.Coinbase.Bytes()))
+	return nil, nil
+}
+
+func opTimestamp(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.Context.Time)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opNumber(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.Context.BlockNumber)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opDifficulty(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v, _ := uint256.FromBig(interpreter.evm.Context.Difficulty)
+	scope.Stack.push(v)
+	return nil, nil
+}
+
+func opGasLimit(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(interpreter.evm.Context.GasLimit))
+	return nil, nil
+}
+
+func opPop(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.pop()
+	return nil, nil
+}
+
+func opMload(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	v := scope.Stack.peek()
+	offset := int64(v.Uint64())
+	v.SetBytes(scope.Memory.GetPtr(offset, 32))
+	return nil, nil
+}
+
+func opMstore(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// pop value of the stack
+	mStart, val := scope.Stack.pop(), scope.Stack.pop()
+	scope.Memory.Set32(mStart.Uint64(), &amp;val)
+	return nil, nil
+}
+
+func opMstore8(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	off, val := scope.Stack.pop(), scope.Stack.pop()
+	scope.Memory.store[off.Uint64()] = byte(val.Uint64())
+	return nil, nil
+}
+
+func opSload(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	loc := scope.Stack.peek()
+	hash := common.Hash(loc.Bytes32())
+	val := interpreter.evm.StateDB.GetState(scope.Contract.Address(), hash)
+	loc.SetBytes(val.Bytes())
+	return nil, nil
+}
+
+func opSstore(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	loc := scope.Stack.pop()
+	val := scope.Stack.pop()
+	interpreter.evm.StateDB.SetState(scope.Contract.Address(),
+		loc.Bytes32(), val.Bytes32())
+	return nil, nil
+}
+
+func opJump(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	pos := scope.Stack.pop()
+	if !scope.Contract.validJumpdest(&amp;pos) {
+		return nil, ErrInvalidJump
+	}
+	*pc = pos.Uint64()
+	return nil, nil
+}
+
+func opJumpi(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	pos, cond := scope.Stack.pop(), scope.Stack.pop()
+	if !cond.IsZero() {
+		if !scope.Contract.validJumpdest(&amp;pos) {
+			return nil, ErrInvalidJump
+		}
+		*pc = pos.Uint64()
+	} else {
+		*pc++
+	}
+	return nil, nil
+}
+
+func opJumpdest(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	return nil, nil
+}
+
+func opPc(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(*pc))
+	return nil, nil
+}
+
+func opMsize(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(uint64(scope.Memory.Len())))
+	return nil, nil
+}
+
+func opGas(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	scope.Stack.push(new(uint256.Int).SetUint64(scope.Contract.Gas))
+	return nil, nil
+}
+
+func opCreate(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		value        = scope.Stack.pop()
+		offset, size = scope.Stack.pop(), scope.Stack.pop()
+		input        = scope.Memory.GetCopy(int64(offset.Uint64()), int64(size.Uint64()))
+		gas          = scope.Contract.Gas
+	)
+	if interpreter.evm.chainRules.IsEIP150 {
+		gas -= gas / 64
+	}
+	// reuse size int for stackvalue
+	stackvalue := size
+
+	scope.Contract.UseGas(gas)
+	//TODO: use uint256.Int instead of converting with toBig()
+	var bigVal = big0
+	if !value.IsZero() {
+		bigVal = value.ToBig()
+	}
+
+	res, addr, returnGas, suberr := interpreter.evm.Create(scope.Contract, input, gas, bigVal)
+	// Push item on the stack based on the returned error. If the ruleset is
+	// homestead we must check for CodeStoreOutOfGasError (homestead only
+	// rule) and treat as an error, if the ruleset is frontier we must
+	// ignore this error and pretend the operation was successful.
+	if interpreter.evm.chainRules.IsHomestead &amp;&amp; suberr == ErrCodeStoreOutOfGas {
+		stackvalue.Clear()
+	} else if suberr != nil &amp;&amp; suberr != ErrCodeStoreOutOfGas {
+		stackvalue.Clear()
+	} else {
+		stackvalue.SetBytes(addr.Bytes())
+	}
+	scope.Stack.push(&amp;stackvalue)
+	scope.Contract.Gas += returnGas
+
+	if suberr == ErrExecutionReverted {
+		return res, nil
+	}
+	return nil, nil
+}
+
+func opCreate2(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		endowment    = scope.Stack.pop()
+		offset, size = scope.Stack.pop(), scope.Stack.pop()
+		salt         = scope.Stack.pop()
+		input        = scope.Memory.GetCopy(int64(offset.Uint64()), int64(size.Uint64()))
+		gas          = scope.Contract.Gas
+	)
+
+	// Apply EIP150
+	gas -= gas / 64
+	scope.Contract.UseGas(gas)
+	// reuse size int for stackvalue
+	stackvalue := size
+	//TODO: use uint256.Int instead of converting with toBig()
+	bigEndowment := big0
+	if !endowment.IsZero() {
+		bigEndowment = endowment.ToBig()
+	}
+	res, addr, returnGas, suberr := interpreter.evm.Create2(scope.Contract, input, gas,
+		bigEndowment, &amp;salt)
+	// Push item on the stack based on the returned error.
+	if suberr != nil {
+		stackvalue.Clear()
+	} else {
+		stackvalue.SetBytes(addr.Bytes())
+	}
+	scope.Stack.push(&amp;stackvalue)
+	scope.Contract.Gas += returnGas
+
+	if suberr == ErrExecutionReverted {
+		return res, nil
+	}
+	return nil, nil
+}
+
+func opCall(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	stack := scope.Stack
+	// Pop gas. The actual gas in interpreter.evm.callGasTemp.
+	// We can use this as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, value, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get the arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	var bigVal = big0
+	//TODO: use uint256.Int instead of converting with toBig()
+	// By using big0 here, we save an alloc for the most common case (non-ether-transferring contract calls),
+	// but it would make more sense to extend the usage of uint256.Int
+	if !value.IsZero() {
+		gas += params.CallStipend
+		bigVal = value.ToBig()
+	}
+
+	ret, returnGas, err := interpreter.evm.Call(scope.Contract, toAddr, args, gas, bigVal)
+
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opCallCode(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Pop gas. The actual gas is in interpreter.evm.callGasTemp.
+	stack := scope.Stack
+	// We use it as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, value, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	//TODO: use uint256.Int instead of converting with toBig()
+	var bigVal = big0
+	if !value.IsZero() {
+		gas += params.CallStipend
+		bigVal = value.ToBig()
+	}
+
+	ret, returnGas, err := interpreter.evm.CallCode(scope.Contract, toAddr, args, gas, bigVal)
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opDelegateCall(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	stack := scope.Stack
+	// Pop gas. The actual gas is in interpreter.evm.callGasTemp.
+	// We use it as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	ret, returnGas, err := interpreter.evm.DelegateCall(scope.Contract, toAddr, args, gas)
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opStaticCall(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	// Pop gas. The actual gas is in interpreter.evm.callGasTemp.
+	stack := scope.Stack
+	// We use it as a temporary value
+	temp := stack.pop()
+	gas := interpreter.evm.callGasTemp
+	// Pop other call parameters.
+	addr, inOffset, inSize, retOffset, retSize := stack.pop(), stack.pop(), stack.pop(), stack.pop(), stack.pop()
+	toAddr := common.Address(addr.Bytes20())
+	// Get arguments from the memory.
+	args := scope.Memory.GetPtr(int64(inOffset.Uint64()), int64(inSize.Uint64()))
+
+	ret, returnGas, err := interpreter.evm.StaticCall(scope.Contract, toAddr, args, gas)
+	if err != nil {
+		temp.Clear()
+	} else {
+		temp.SetOne()
+	}
+	stack.push(&amp;temp)
+	if err == nil || err == ErrExecutionReverted {
+		scope.Memory.Set(retOffset.Uint64(), retSize.Uint64(), ret)
+	}
+	scope.Contract.Gas += returnGas
+
+	return ret, nil
+}
+
+func opReturn(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	offset, size := scope.Stack.pop(), scope.Stack.pop()
+	ret := scope.Memory.GetPtr(int64(offset.Uint64()), int64(size.Uint64()))
+
+	return ret, nil
+}
+
+func opRevert(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	offset, size := scope.Stack.pop(), scope.Stack.pop()
+	ret := scope.Memory.GetPtr(int64(offset.Uint64()), int64(size.Uint64()))
+
+	return ret, nil
+}
+
+func opStop(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	return nil, nil
+}
+
+func opSuicide(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	beneficiary := scope.Stack.pop()
+	balance := interpreter.evm.StateDB.GetBalance(scope.Contract.Address())
+	interpreter.evm.StateDB.AddBalance(beneficiary.Bytes20(), balance)
+	interpreter.evm.StateDB.Suicide(scope.Contract.Address())
+	return nil, nil
+}
+
+// following functions are used by the instruction jump  table
+
+// make log instruction function
+func makeLog(size int) executionFunc {
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		topics := make([]common.Hash, size)
+		stack := scope.Stack
+		mStart, mSize := stack.pop(), stack.pop()
+		for i := 0; i &lt; size; i++ {
+			addr := stack.pop()
+			topics[i] = addr.Bytes32()
+		}
+
+		d := scope.Memory.GetCopy(int64(mStart.Uint64()), int64(mSize.Uint64()))
+		interpreter.evm.StateDB.AddLog(&amp;types.Log{
+			Address: scope.Contract.Address(),
+			Topics:  topics,
+			Data:    d,
+			// This is a non-consensus field, but assigned here because
+			// core/state doesn't know the current block number.
+			BlockNumber: interpreter.evm.Context.BlockNumber.Uint64(),
+		})
+
+		return nil, nil
+	}
+}
+
+// opPush1 is a specialized version of pushN
+func opPush1(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+	var (
+		codeLen = uint64(len(scope.Contract.Code))
+		integer = new(uint256.Int)
+	)
+	*pc += 1
+	if *pc &lt; codeLen {
+		scope.Stack.push(integer.SetUint64(uint64(scope.Contract.Code[*pc])))
+	} else {
+		scope.Stack.push(integer.Clear())
+	}
+	return nil, nil
+}
+
+// make push instruction function
+func makePush(size uint64, pushByteSize int) executionFunc {
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		codeLen := len(scope.Contract.Code)
+
+		startMin := codeLen
+		if int(*pc+1) &lt; startMin {
+			startMin = int(*pc + 1)
+		}
+
+		endMin := codeLen
+		if startMin+pushByteSize &lt; endMin {
+			endMin = startMin + pushByteSize
+		}
+
+		integer := new(uint256.Int)
+		scope.Stack.push(integer.SetBytes(common.RightPadBytes(
+			scope.Contract.Code[startMin:endMin], pushByteSize)))
+
+		*pc += size
+		return nil, nil
+	}
+}
+
+// make dup instruction function
+func makeDup(size int64) executionFunc {
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		scope.Stack.dup(int(size))
+		return nil, nil
+	}
+}
+
+// make swap instruction function
+func makeSwap(size int64) executionFunc {
+	// switch n + 1 otherwise n would be swapped with n
+	size++
+	return func(pc *uint64, interpreter *EVMInterpreter, scope *ScopeContext) ([]byte, error) {
+		scope.Stack.swap(int(size))
+		return nil, nil
+	}
+}
+
+</code></pre>
+<div id="chapter_begin" style="break-before: page; page-break-before: always;"></div><h1 id="字节码执行过程"><a class="header" href="#字节码执行过程">字节码执行过程</a></h1>
+<p><img src="./imgs/EVM.png" alt="主要流程图" /></p>
+<p><code>EVMInterpreter</code> 不断从智能合约编译后的字节码中获取指令和数据，将数据或结果存放在 <code>Stack</code>  <code>Memory</code> 或 <code>StateDB</code></p>
+<pre><code class="language-go">func (in *EVMInterpreter) Run(contract *Contract, input []byte, readOnly bool) (ret []byte, err error) {
+    ...
+	var (
+		op          OpCode        // current opcode
+		mem         = NewMemory() // bound memory
+		stack       = newstack()  // local stack
+		callContext = &amp;ScopeContext{
+			Memory:   mem,
+			Stack:    stack,
+			Contract: contract,
+		}
+        
+		pc   = uint64(0) // program counter
+        
+	)
+    
+	// The Interpreter main run loop (contextual). This loop runs until either an
+	// explicit STOP, RETURN or SELFDESTRUCT is executed, an error occurred during
+	// the execution of one of the operations or until the done flag is set by the
+	// parent context.
+	steps := 0
+	for {
+		steps++
+		if steps%1000 == 0 &amp;&amp; atomic.LoadInt32(&amp;in.evm.abort) != 0 {
+			break
+		}
+        ...
+		// Get the operation from the jump table and validate the stack to ensure there are
+		// enough stack items available to perform the operation.
+		op = contract.GetOp(pc)
+		operation := in.cfg.JumpTable[op]
+		if operation == nil {
+			return nil, &amp;ErrInvalidOpCode{opcode: op}
+		}
+        
+		// execute the operation
+		res, err = operation.execute(&amp;pc, in, callContext)
+        
+
+		switch {
+		case err != nil:
+			return nil, err
+		case operation.reverts:
+			return res, ErrExecutionReverted
+		case operation.halts:
+			return res, nil
+		case !operation.jumps:
+			pc++
+		}
+	}
+	return nil, nil
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

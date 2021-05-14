@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>挖矿miner - learn ethereum</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        
+        <link rel="stylesheet" href="css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="开发环境搭建.html"><strong aria-hidden="true">1.</strong> 开发环境搭建</a></li><li class="chapter-item expanded "><a href="Geth命令及参数.html"><strong aria-hidden="true">2.</strong> Geth命令及参数</a></li><li class="chapter-item expanded "><a href="rpc接口与实现列表.html"><strong aria-hidden="true">3.</strong> rpc接口与实现列表.md</a></li><li class="chapter-item expanded "><a href="交易池调度.html"><strong aria-hidden="true">4.</strong> 交易</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="交易池调度.html"><strong aria-hidden="true">4.1.</strong> 交易池调度</a></li><li class="chapter-item expanded "><a href="交易执行.html"><strong aria-hidden="true">4.2.</strong> 交易执行</a></li></ol></li><li class="chapter-item expanded "><a href="挖矿miner.html" class="active"><strong aria-hidden="true">5.</strong> 挖矿miner</a></li><li class="chapter-item expanded "><a href="操作码.html"><strong aria-hidden="true">6.</strong> EVM以太坊虚拟机</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="操作码.html"><strong aria-hidden="true">6.1.</strong> 操作码</a></li><li class="chapter-item expanded "><a href="字节码执行.html"><strong aria-hidden="true">6.2.</strong> 字节码执行</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">learn ethereum</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                        
+
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="挖矿"><a class="header" href="#挖矿">挖矿</a></h1>
+<p><img src="./imgs/miner_loop.png" alt="主要流程图" /></p>
+<h2 id="启动挖矿"><a class="header" href="#启动挖矿">启动挖矿</a></h2>
+<p>在启动 <code>geth</code> 程序的时候，可以配置挖矿相关的参数：</p>
+<pre><code>
+MINER OPTIONS:
+  --mine                              Enable mining
+  --miner.threads value               Number of CPU threads to use for mining (default: 0)
+  --miner.notify value                Comma separated HTTP URL list to notify of new work packages
+  --miner.notify.full                 Notify with pending block headers instead of work packages
+  --miner.gasprice value              Minimum gas price for mining a transaction (default: 1000000000)
+  --miner.gastarget value             Target gas floor for mined blocks (default: 8000000)
+  --miner.gaslimit value              Target gas ceiling for mined blocks (default: 8000000)
+  --miner.etherbase value             Public address for block mining rewards (default = first account) (default: &quot;0&quot;)
+  --miner.extradata value             Block extra data set by the miner (default = client version)
+  --miner.recommit value              Time interval to recreate the block being mined (default: 3s)
+  --miner.noverify                    Disable remote sealing verification
+
+</code></pre>
+<p>如果没有显式启用挖矿，即不设置参数 <code>--mine</code>，那么节点不会开始挖矿</p>
+<p>可以在节点启动后，手动在控制台启动挖矿：</p>
+<pre><code>&gt; miner.start(1)
+</code></pre>
+<h2 id="信号调度"><a class="header" href="#信号调度">信号调度</a></h2>
+<p>Worker 启动四个循环，通过监听各个通道的信号变化来调度挖矿过程</p>
+<ul>
+<li>
+<p>newWorkLoop：</p>
+<ul>
+<li>startCh:监听 <code>miner.worker.start()</code></li>
+<li>chainHeadCh：监听新出块事件<code>ChainHeadEvent</code></li>
+<li>timer.C：监听定时触发事件</li>
+<li>当以上任意信号发生时，调用 <code>commit()</code> 方法，提交 <code>newWorkReq{}</code> 请求</li>
+</ul>
+</li>
+<li>
+<p>mainLoop:</p>
+<ul>
+<li>
+<p>newWorkCh：监听 <code>newWorkReq{}</code> 信号：</p>
+<ul>
+<li>调用 <code>worker.commitNewWork()</code>：
+<ul>
+<li>计算难度</li>
+<li>提交叔块</li>
+<li>执行交易</li>
+<li>创建计算任务</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>chainSideCh：监听叔块事件</p>
+</li>
+<li>
+<p>txsCh：监听新交易事件</p>
+</li>
+</ul>
+</li>
+<li>
+<p>taskLoop：</p>
+<ul>
+<li>taskCh：监听任务信号：
+<ul>
+<li>中断进行中的计算</li>
+<li>重新开始计算</li>
+<li>返回计算结果</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>resultLoop：</p>
+<ul>
+<li>resultCh：监听结果信号：
+<ul>
+<li>广播出块事件 <code>NewMinedBlockEvent</code></li>
+<li>写入区块链：
+<ul>
+<li>触发 <code>ChainHeadEvent</code> 事件：
+<ul>
+<li>由于 <code>newWorkLoop</code> 在监听<code>ChainHeadEvent</code>，所以会开始下一轮挖矿</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="交易执行.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="操作码.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="交易执行.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="操作码.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
